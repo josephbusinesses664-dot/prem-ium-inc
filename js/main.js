@@ -212,18 +212,29 @@ document.querySelectorAll('[data-bubbles]').forEach(c => spawnBubbles(c));
   });
 })();
 
-// ─── Card 3-D tilt ──────────────────────────────────────────
+// ─── Card 3-D tilt + glare ──────────────────────────────────
 window.applyTilt = function (scope) {
   (scope || document).querySelectorAll('[data-tilt]').forEach(card => {
+    if (card.dataset.tiltInit) return;
+    card.dataset.tiltInit = '1';
     card.style.transformStyle = 'preserve-3d';
+    if (getComputedStyle(card).position === 'static') card.style.position = 'relative';
+
+    const glare = document.createElement('div');
+    glare.className = 'tilt-glare';
+    card.appendChild(glare);
+
     card.addEventListener('mousemove', e => {
       const { left, top, width, height } = card.getBoundingClientRect();
       const nx = (e.clientX - left) / width  - .5;
       const ny = (e.clientY - top)  / height - .5;
       gsap.to(card, { rotateX: -ny * 11, rotateY: nx * 11, transformPerspective: 900, duration: .35, ease: 'power2.out' });
+      glare.style.opacity = '1';
+      glare.style.background = `radial-gradient(circle at ${(nx + .5) * 100}% ${(ny + .5) * 100}%, rgba(255,255,255,.09) 0%, rgba(139,92,246,.05) 35%, transparent 65%)`;
     });
     card.addEventListener('mouseleave', () => {
       gsap.to(card, { rotateX: 0, rotateY: 0, duration: .55, ease: 'back.out(1.5)' });
+      glare.style.opacity = '0';
     });
   });
 };
@@ -243,24 +254,35 @@ document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
 // ─── Text scramble on scroll ────────────────────────────────
 (function () {
   const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
+  // Scrambles text nodes in place so nested markup (gradient spans,
+  // multi-line block spans) survives the animation intact.
   function scramble(el) {
-    const originalHTML = el.innerHTML;
-    const originalText = el.textContent;
-    const len = originalText.length;
+    const nodes = [];
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let n;
+    while ((n = walker.nextNode())) {
+      if (n.data.trim()) nodes.push({ node: n, text: n.data });
+    }
+    if (!nodes.length) return;
+    const total = nodes.reduce((sum, x) => sum + x.text.length, 0);
     let frame = 0;
     const totalFrames = 48;   // more frames = longer duration
     const FRAME_MS    = 42;   // ms per step → ~2 seconds total
     const tick = () => {
       if (frame <= totalFrames) {
-        el.textContent = originalText.split('').map((ch, i) => {
-          if (ch === ' ' || ch === '\n') return ch;
-          if (frame / totalFrames >= i / len) return ch;
-          return CHARS[Math.floor(Math.random() * CHARS.length)];
-        }).join('');
+        let offset = 0;
+        nodes.forEach(({ node, text }) => {
+          node.data = text.split('').map((ch, i) => {
+            if (ch === ' ' || ch === '\n') return ch;
+            if (frame / totalFrames >= (offset + i) / total) return ch;
+            return CHARS[Math.floor(Math.random() * CHARS.length)];
+          }).join('');
+          offset += text.length;
+        });
         frame++;
         setTimeout(tick, FRAME_MS);
       } else {
-        el.innerHTML = originalHTML;
+        nodes.forEach(({ node, text }) => { node.data = text; });
       }
     };
     setTimeout(tick, FRAME_MS);
@@ -273,4 +295,31 @@ document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
   }, { threshold: .25 });
 
   document.querySelectorAll('[data-scramble]').forEach(el => obs.observe(el));
+})();
+
+// ─── Scroll progress bar ────────────────────────────────────
+(function () {
+  const bar = document.createElement('div');
+  bar.id = 'scroll-progress';
+  document.body.appendChild(bar);
+  const update = () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = `scaleX(${max > 0 ? Math.min(scrollY / max, 1) : 0})`;
+  };
+  addEventListener('scroll', update, { passive: true });
+  addEventListener('resize', update);
+  update();
+})();
+
+// ─── Back to top ────────────────────────────────────────────
+(function () {
+  const btn = document.createElement('button');
+  btn.id = 'back-to-top';
+  btn.setAttribute('aria-label', 'Back to top');
+  btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>`;
+  document.body.appendChild(btn);
+  btn.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+  addEventListener('scroll', () => {
+    btn.classList.toggle('visible', scrollY > 600);
+  }, { passive: true });
 })();

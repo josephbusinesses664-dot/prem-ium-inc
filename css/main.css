@@ -237,6 +237,47 @@ body::after {
   background-size: 180px 180px;
 }
 
+/* ── Scroll progress bar ───────────────────────────── */
+#scroll-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px;
+  z-index: 10001;
+  background: var(--grad);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  pointer-events: none;
+  box-shadow: 0 0 10px var(--glow);
+}
+
+/* ── Back to top ───────────────────────────────────── */
+#back-to-top {
+  position: fixed; bottom: 28px; right: 28px; z-index: 9000;
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg-card); color: var(--text);
+  border: 1px solid var(--border); cursor: pointer;
+  opacity: 0; transform: translateY(16px); pointer-events: none;
+  transition: opacity .3s, transform .3s, border-color .2s, box-shadow .2s;
+}
+#back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+#back-to-top:hover { border-color: var(--accent); box-shadow: 0 0 20px var(--glow); }
+
+/* ── Tilt glare ────────────────────────────────────── */
+.tilt-glare {
+  position: absolute; inset: 0; border-radius: inherit;
+  pointer-events: none; opacity: 0;
+  transition: opacity .3s;
+}
+
+/* ── Reduced motion ────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
 /* ── Available badge ───────────────────────────────── */
 .available-badge {
   display: inline-flex; align-items: center; gap: 8px;
