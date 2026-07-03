@@ -31,6 +31,7 @@ if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
 
   // Generic scroll-reveal for anything with data-reveal
   gsap.utils.toArray('[data-reveal]').forEach(el => {
+    if (el.hasAttribute('data-words')) return; // masked word reveal handles these
     const delay = parseFloat(el.dataset.delay || 0);
     gsap.fromTo(el,
       { opacity: 0, y: 40 },
@@ -251,50 +252,64 @@ document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
   });
 });
 
-// ─── Text scramble on scroll ────────────────────────────────
+// ─── Masked word reveal on scroll ───────────────────────────
+// Each word slides up from behind an invisible mask with a slight
+// stagger. Splits text nodes only, so nested markup (gradient spans,
+// multi-line block spans, <br>) stays intact.
 (function () {
-  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
-  // Scrambles text nodes in place so nested markup (gradient spans,
-  // multi-line block spans) survives the animation intact.
-  function scramble(el) {
-    const nodes = [];
+  function splitWords(el) {
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
     let n;
     while ((n = walker.nextNode())) {
-      if (n.data.trim()) nodes.push({ node: n, text: n.data });
+      if (n.data.trim()) textNodes.push(n);
     }
-    if (!nodes.length) return;
-    const total = nodes.reduce((sum, x) => sum + x.text.length, 0);
-    let frame = 0;
-    const totalFrames = 48;   // more frames = longer duration
-    const FRAME_MS    = 42;   // ms per step → ~2 seconds total
-    const tick = () => {
-      if (frame <= totalFrames) {
-        let offset = 0;
-        nodes.forEach(({ node, text }) => {
-          node.data = text.split('').map((ch, i) => {
-            if (ch === ' ' || ch === '\n') return ch;
-            if (frame / totalFrames >= (offset + i) / total) return ch;
-            return CHARS[Math.floor(Math.random() * CHARS.length)];
-          }).join('');
-          offset += text.length;
-        });
-        frame++;
-        setTimeout(tick, FRAME_MS);
-      } else {
-        nodes.forEach(({ node, text }) => { node.data = text; });
-      }
-    };
-    setTimeout(tick, FRAME_MS);
+    const inners = [];
+    textNodes.forEach(node => {
+      const isGrad = node.parentElement.closest('.grad-text') !== null;
+      const frag = document.createDocumentFragment();
+      node.data.split(/(\s+)/).forEach(part => {
+        if (!part) return;
+        if (!part.trim()) { frag.appendChild(document.createTextNode(part)); return; }
+        const mask = document.createElement('span');
+        mask.className = 'reveal-word';
+        const inner = document.createElement('span');
+        inner.className = 'reveal-word-inner' + (isGrad ? ' grad-text' : '');
+        inner.textContent = part;
+        mask.appendChild(inner);
+        frag.appendChild(mask);
+        inners.push(inner);
+      });
+      node.parentNode.replaceChild(frag, node);
+    });
+    return inners;
   }
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const targets = [];
+  document.querySelectorAll('[data-words]').forEach(el => {
+    if (reduced || typeof gsap === 'undefined') return;
+    targets.push({ el, inners: splitWords(el) });
+  });
 
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
-      if (e.isIntersecting) { scramble(e.target); obs.unobserve(e.target); }
+      if (!e.isIntersecting) return;
+      const t = targets.find(x => x.el === e.target);
+      if (t) {
+        gsap.to(t.inners, {
+          y: 0,
+          duration: .9,
+          stagger: .07,
+          ease: 'power4.out',
+          delay: parseFloat(e.target.dataset.delay || 0),
+        });
+      }
+      obs.unobserve(e.target);
     });
-  }, { threshold: .25 });
+  }, { threshold: .3 });
 
-  document.querySelectorAll('[data-scramble]').forEach(el => obs.observe(el));
+  targets.forEach(t => obs.observe(t.el));
 })();
 
 // ─── Scroll progress bar ────────────────────────────────────

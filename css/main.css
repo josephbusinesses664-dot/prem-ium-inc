@@ -237,6 +237,16 @@ body::after {
   background-size: 180px 180px;
 }
 
+/* ── Masked word reveal ────────────────────────────── */
+.reveal-word {
+  display: inline-block; overflow: hidden; vertical-align: top;
+  padding-bottom: .12em; margin-bottom: -.12em; /* room for descenders */
+}
+.reveal-word-inner {
+  display: inline-block;
+  transform: translateY(115%);
+}
+
 /* ── Scroll progress bar ───────────────────────────── */
 #scroll-progress {
   position: fixed; top: 0; left: 0; right: 0; height: 3px;
