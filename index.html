@@ -368,6 +368,7 @@ heroTl
 
 // Typewriter
 const words = ['websites.', 'experiences.', 'brands.', 'futures.', 'the web.'];
+const pauseAfter = [3800, 1600, 1600, 1600, 1600]; // longer pause on "websites."
 let wi = 0, ci = 0, deleting = false;
 const typedEl = document.getElementById('typed-text');
 
@@ -375,12 +376,12 @@ function type() {
   const word = words[wi];
   if (!deleting) {
     typedEl.textContent = word.slice(0, ++ci);
-    if (ci === word.length) { deleting = true; setTimeout(type, 1800); return; }
+    if (ci === word.length) { deleting = true; setTimeout(type, pauseAfter[wi]); return; }
   } else {
     typedEl.textContent = word.slice(0, --ci);
     if (ci === 0) { deleting = false; wi = (wi + 1) % words.length; }
   }
-  setTimeout(type, deleting ? 60 : 100);
+  setTimeout(type, deleting ? 55 : 95);
 }
 setTimeout(type, 1200);
 
