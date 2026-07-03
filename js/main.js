@@ -101,4 +101,4 @@ function spawnParticles(container, count = 25) {
     container.appendChild(p);
   }
 }
-document.querySelectorAll('[data-particles]').forEach(c => spawnParticles(c, 25));
+document.querySelectorAll('[data-particles]').forEach(c => spawnParticles(c, 60));
