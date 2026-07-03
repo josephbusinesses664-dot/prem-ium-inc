@@ -98,7 +98,7 @@
 
 <div class="page-hero" style="position:relative;overflow:hidden;" data-particles>
   <div class="glow-blob" style="width:600px;height:600px;background:radial-gradient(circle,rgba(236,72,153,.1) 0%,transparent 70%);top:-200px;left:50%;transform:translateX(-50%);"></div>
-  <div class="eyebrow" data-reveal>The Work</div>
+  <div class="eyebrow" data-reveal data-scramble>The Work</div>
   <h1 data-reveal data-delay=".1"><span class="grad-text">25+</span> sites built.<br>All live.</h1>
   <p data-reveal data-delay=".2">Real businesses, real results. Browse every site I've shipped.</p>
 </div>
@@ -197,6 +197,7 @@ async function load() {
         if (s.githubRepo) repoToPortal[s.githubRepo] = s;
       }
 
+      const seen = new Set();
       allSites = repos
         .filter(r => !EXCLUDE.has(r.name) && r.name.startsWith('preview-') && r.description)
         .map(r => {
@@ -212,6 +213,12 @@ async function load() {
             updatedAt: r.updated_at,
             ghUrl: r.html_url
           };
+        })
+        .filter(s => {
+          const key = s.business.toLowerCase().trim();
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
         })
         .sort((a, b) => a.business.localeCompare(b.business));
     } else {
@@ -241,7 +248,7 @@ function render() {
   }
 
   document.getElementById('grid').innerHTML = filtered.map(s => `
-    <div class="port-card">
+    <div class="port-card" data-tilt>
       <span class="port-badge">${s.category}</span>
       <div class="port-name">${s.business}</div>
       <div class="port-city"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:3px;opacity:.7"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>${s.city}</div>
@@ -255,6 +262,7 @@ function render() {
   if (typeof gsap !== 'undefined') {
     gsap.fromTo('#grid .port-card', { opacity:0, y:30 }, { opacity:1, y:0, duration:.5, stagger:.04, ease:'power2.out' });
   }
+  if (typeof window.applyTilt === 'function') window.applyTilt(document.getElementById('grid'));
 }
 
 document.getElementById('search').addEventListener('input', render);

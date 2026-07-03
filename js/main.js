@@ -196,3 +196,104 @@ function spawnBubbles(container, count = 34) {
   }
 }
 document.querySelectorAll('[data-bubbles]').forEach(c => spawnBubbles(c));
+
+// ─── Custom cursor ──────────────────────────────────────────
+(function () {
+  if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
+  const dot  = document.createElement('div'); dot.id  = 'cursor';
+  const ring = document.createElement('div'); ring.id = 'cursor-ring';
+  document.body.append(dot, ring);
+
+  gsap.set([dot, ring], { xPercent: -50, yPercent: -50 });
+  const mx = gsap.quickTo(dot,  'x', { duration: .06 });
+  const my = gsap.quickTo(dot,  'y', { duration: .06 });
+  const rx = gsap.quickTo(ring, 'x', { duration: .14, ease: 'power3' });
+  const ry = gsap.quickTo(ring, 'y', { duration: .14, ease: 'power3' });
+
+  window.addEventListener('mousemove', e => { mx(e.clientX); my(e.clientY); rx(e.clientX); ry(e.clientY); });
+
+  const hoverEls = 'a, button, [data-tilt], .nav-cta, .btn, label, input, textarea, select, .svc-card, .port-card, .svc-full-card';
+  document.addEventListener('mouseover',  e => { if (e.target.closest(hoverEls)) document.body.classList.add('cursor-hover'); });
+  document.addEventListener('mouseout',   e => { if (e.target.closest(hoverEls)) document.body.classList.remove('cursor-hover'); });
+  document.addEventListener('mousedown',  () => document.body.classList.add('cursor-click'));
+  document.addEventListener('mouseup',    () => document.body.classList.remove('cursor-click'));
+  document.addEventListener('mouseleave', () => { gsap.to([dot, ring], { opacity: 0, duration: .2 }); });
+  document.addEventListener('mouseenter', () => { gsap.to([dot, ring], { opacity: 1, duration: .2 }); });
+})();
+
+// ─── Hero blob parallax ─────────────────────────────────────
+(function () {
+  const hero  = document.querySelector('[data-bubbles]');
+  const blob1 = hero?.querySelector('.blob-1');
+  const blob2 = hero?.querySelector('.blob-2');
+  if (!hero || !blob1 || !blob2) return;
+  hero.addEventListener('mousemove', e => {
+    const { left, top, width, height } = hero.getBoundingClientRect();
+    const nx = (e.clientX - left) / width  - .5;
+    const ny = (e.clientY - top)  / height - .5;
+    gsap.to(blob1, { x: nx * 50, y: ny * 36, duration: 1.4, ease: 'power2.out' });
+    gsap.to(blob2, { x: -nx * 36, y: -ny * 26, duration: 1.7, ease: 'power2.out' });
+  });
+})();
+
+// ─── Card 3-D tilt ──────────────────────────────────────────
+window.applyTilt = function (scope) {
+  (scope || document).querySelectorAll('[data-tilt]').forEach(card => {
+    card.style.transformStyle = 'preserve-3d';
+    card.addEventListener('mousemove', e => {
+      const { left, top, width, height } = card.getBoundingClientRect();
+      const nx = (e.clientX - left) / width  - .5;
+      const ny = (e.clientY - top)  / height - .5;
+      gsap.to(card, { rotateX: -ny * 11, rotateY: nx * 11, transformPerspective: 900, duration: .35, ease: 'power2.out' });
+    });
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, { rotateX: 0, rotateY: 0, duration: .55, ease: 'back.out(1.5)' });
+    });
+  });
+};
+window.applyTilt();
+
+// ─── Magnetic buttons ───────────────────────────────────────
+document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const { left, top, width, height } = btn.getBoundingClientRect();
+    gsap.to(btn, { x: (e.clientX - left - width / 2) * .22, y: (e.clientY - top - height / 2) * .22, duration: .32, ease: 'power2.out' });
+  });
+  btn.addEventListener('mouseleave', () => {
+    gsap.to(btn, { x: 0, y: 0, duration: .55, ease: 'elastic.out(1, .45)' });
+  });
+});
+
+// ─── Text scramble on scroll ────────────────────────────────
+(function () {
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
+  function scramble(el) {
+    const originalHTML = el.innerHTML;
+    const originalText = el.textContent;
+    const len = originalText.length;
+    let frame = 0;
+    const totalFrames = 20;
+    const tick = () => {
+      if (frame <= totalFrames) {
+        el.textContent = originalText.split('').map((ch, i) => {
+          if (ch === ' ' || ch === '\n') return ch;
+          if (frame / totalFrames >= i / len) return ch;
+          return CHARS[Math.floor(Math.random() * CHARS.length)];
+        }).join('');
+        frame++;
+        requestAnimationFrame(tick);
+      } else {
+        el.innerHTML = originalHTML;
+      }
+    };
+    requestAnimationFrame(tick);
+  }
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { scramble(e.target); obs.unobserve(e.target); }
+    });
+  }, { threshold: .25 });
+
+  document.querySelectorAll('[data-scramble]').forEach(el => obs.observe(el));
+})();
