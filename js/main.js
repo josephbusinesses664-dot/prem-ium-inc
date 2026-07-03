@@ -91,6 +91,7 @@ function spawnParticles(container, count = 25) {
     const size = Math.random() * 4 + 2;
     p.style.cssText = `
       left: ${Math.random() * 100}%;
+      bottom: -10px;
       width: ${size}px; height: ${size}px;
       animation-duration: ${Math.random() * 15 + 10}s;
       animation-delay: ${Math.random() * 10}s;

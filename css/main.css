@@ -201,15 +201,14 @@ section { padding: 100px 40px; }
 
 /* ── Particles ─────────────────────────────── */
 .particle {
-  position: absolute; width: 4px; height: 4px; border-radius: 50%;
-  background: var(--accent); opacity: .5;
+  position: absolute; border-radius: 50%;
   animation: particleFloat linear infinite;
 }
 @keyframes particleFloat {
-  0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-  10% { opacity: .5; }
-  90% { opacity: .5; }
-  100% { transform: translateY(-100px) translateX(var(--dx,0)); opacity: 0; }
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  8%   { opacity: 1; }
+  90%  { opacity: .4; }
+  100% { transform: translateY(-110vh) translateX(var(--dx,0)); opacity: 0; }
 }
 
 @media (max-width: 768px) {
