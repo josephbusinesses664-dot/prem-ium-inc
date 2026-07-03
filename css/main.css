@@ -237,38 +237,6 @@ body::after {
   background-size: 180px 180px;
 }
 
-/* ── Custom cursor ─────────────────────────────────── */
-#cursor, #cursor-ring {
-  position: fixed; top: 0; left: 0;
-  border-radius: 50%; pointer-events: none;
-  z-index: 99999; will-change: transform;
-}
-#cursor {
-  width: 8px; height: 8px;
-  background: var(--accent);
-  box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(139,92,246,.4);
-  transition: width .18s, height .18s, background .18s, box-shadow .18s, opacity .2s;
-}
-#cursor-ring {
-  width: 34px; height: 34px;
-  border: 1.5px solid rgba(139,92,246,.45);
-  background: rgba(139,92,246,.04);
-  transition: width .22s, height .22s, border-color .22s, background .22s, opacity .2s;
-}
-body.cursor-hover #cursor {
-  width: 5px; height: 5px;
-  background: var(--accent-2);
-  box-shadow: 0 0 10px var(--accent-2), 0 0 24px rgba(236,72,153,.5);
-}
-body.cursor-hover #cursor-ring {
-  width: 50px; height: 50px;
-  border-color: rgba(236,72,153,.4);
-  background: rgba(236,72,153,.03);
-}
-body.cursor-click #cursor { width: 4px; height: 4px; }
-body.cursor-click #cursor-ring { width: 28px; height: 28px; }
-@media (hover: none), (pointer: coarse) { #cursor, #cursor-ring { display: none !important; } }
-
 /* ── Available badge ───────────────────────────────── */
 .available-badge {
   display: inline-flex; align-items: center; gap: 8px;

@@ -197,30 +197,6 @@ function spawnBubbles(container, count = 34) {
 }
 document.querySelectorAll('[data-bubbles]').forEach(c => spawnBubbles(c));
 
-// ─── Custom cursor ──────────────────────────────────────────
-(function () {
-  if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
-  const dot  = document.createElement('div'); dot.id  = 'cursor';
-  const ring = document.createElement('div'); ring.id = 'cursor-ring';
-  document.body.append(dot, ring);
-
-  gsap.set([dot, ring], { xPercent: -50, yPercent: -50 });
-  const mx = gsap.quickTo(dot,  'x', { duration: .06 });
-  const my = gsap.quickTo(dot,  'y', { duration: .06 });
-  const rx = gsap.quickTo(ring, 'x', { duration: .14, ease: 'power3' });
-  const ry = gsap.quickTo(ring, 'y', { duration: .14, ease: 'power3' });
-
-  window.addEventListener('mousemove', e => { mx(e.clientX); my(e.clientY); rx(e.clientX); ry(e.clientY); });
-
-  const hoverEls = 'a, button, [data-tilt], .nav-cta, .btn, label, input, textarea, select, .svc-card, .port-card, .svc-full-card';
-  document.addEventListener('mouseover',  e => { if (e.target.closest(hoverEls)) document.body.classList.add('cursor-hover'); });
-  document.addEventListener('mouseout',   e => { if (e.target.closest(hoverEls)) document.body.classList.remove('cursor-hover'); });
-  document.addEventListener('mousedown',  () => document.body.classList.add('cursor-click'));
-  document.addEventListener('mouseup',    () => document.body.classList.remove('cursor-click'));
-  document.addEventListener('mouseleave', () => { gsap.to([dot, ring], { opacity: 0, duration: .2 }); });
-  document.addEventListener('mouseenter', () => { gsap.to([dot, ring], { opacity: 1, duration: .2 }); });
-})();
-
 // ─── Hero blob parallax ─────────────────────────────────────
 (function () {
   const hero  = document.querySelector('[data-bubbles]');
@@ -272,7 +248,8 @@ document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
     const originalText = el.textContent;
     const len = originalText.length;
     let frame = 0;
-    const totalFrames = 20;
+    const totalFrames = 48;   // more frames = longer duration
+    const FRAME_MS    = 42;   // ms per step → ~2 seconds total
     const tick = () => {
       if (frame <= totalFrames) {
         el.textContent = originalText.split('').map((ch, i) => {
@@ -281,12 +258,12 @@ document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
           return CHARS[Math.floor(Math.random() * CHARS.length)];
         }).join('');
         frame++;
-        requestAnimationFrame(tick);
+        setTimeout(tick, FRAME_MS);
       } else {
         el.innerHTML = originalHTML;
       }
     };
-    requestAnimationFrame(tick);
+    setTimeout(tick, FRAME_MS);
   }
 
   const obs = new IntersectionObserver(entries => {
