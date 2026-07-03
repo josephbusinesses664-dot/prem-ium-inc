@@ -317,6 +317,16 @@
   </div>
 </section>
 
+<!-- ── Featured Work ─────────────────────────────── -->
+<section id="work">
+  <div class="container">
+    <div class="section-label" data-reveal>Finished Work</div>
+    <h2 class="section-title" data-reveal data-delay=".05">Built &amp; shipped.<br><span class="grad-text">All live.</span></h2>
+    <p class="section-sub" data-reveal data-delay=".1">A snapshot of client sites live in production. <a href="portfolio.html" style="color:var(--accent);text-decoration:none;font-weight:600">See all 25+ →</a></p>
+    <div id="work-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:48px"></div>
+  </div>
+</section>
+
 <!-- ── Flower strip ───────────────────────────────── -->
 <div class="flower-section">
   <div class="flower-strip" id="flower-strip">
@@ -418,6 +428,35 @@ if (typeof ScrollTrigger !== 'undefined') {
     }
   });
 }
+
+// Featured work grid — shows first 6 sites from portal API
+(async function() {
+  const grid = document.getElementById('work-grid');
+  if (!grid) return;
+  try {
+    const r = await fetch('https://openclaw-client-portal.onrender.com/api/sites');
+    const sites = await r.json();
+    const entries = Object.entries(sites).slice(0, 6);
+    grid.innerHTML = entries.map(([, s]) => `
+      <a href="${s.renderUrl}" target="_blank" rel="noopener" style="
+        display:block;background:var(--bg-card);border:1px solid var(--border);
+        border-radius:14px;padding:22px;text-decoration:none;color:var(--text);
+        transition:border-color .25s,transform .25s,box-shadow .25s;
+      " onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-4px)';this.style.boxShadow='0 10px 40px var(--glow)'"
+         onmouseout="this.style.borderColor='';this.style.transform='';this.style.boxShadow=''">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--accent);background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.2);padding:3px 10px;border-radius:99px;display:inline-block;margin-bottom:12px">${s.category || 'Business'}</div>
+        <div style="font-family:var(--font-d);font-size:1rem;font-weight:700;margin-bottom:4px">${s.business}</div>
+        <div style="color:var(--muted);font-size:13px;margin-bottom:14px">📍 ${s.city || 'California'}</div>
+        <div style="color:var(--accent);font-size:13px;font-weight:600">View Live →</div>
+      </a>
+    `).join('');
+    if (typeof gsap !== 'undefined') {
+      gsap.fromTo('#work-grid > a', { opacity:0, y:30 }, { opacity:1, y:0, duration:.5, stagger:.08, ease:'power2.out', delay:.2 });
+    }
+  } catch {
+    grid.innerHTML = '<p style="color:var(--muted);grid-column:1/-1">Unable to load — <a href="portfolio.html" style="color:var(--accent)">see portfolio page →</a></p>';
+  }
+})();
 
 // Live visitor ticker — starts at 340, slowly ticks up to simulate live traffic
 (function() {
