@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services | prem-ium.inc</title>
+<meta name="description" content="From local business websites to custom web apps — see what Prem builds and how it can grow your business online.">
+<meta property="og:title" content="Services | prem-ium.inc">
+<meta property="og:description" content="Local business sites, web apps, analytics, SEO, and ongoing support.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="css/main.css">
+<style>
+.services-section { padding: 40px 40px 100px; }
+.services-full-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+  margin-top: 56px;
+}
+.svc-full-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px; padding: 36px;
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+}
+.svc-full-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 48px var(--glow);
+}
+.sfc-icon { font-size: 2.5rem; margin-bottom: 20px; }
+.sfc-title { font-family: var(--font-d); font-size: 1.35rem; font-weight: 700; margin-bottom: 12px; }
+.sfc-desc { color: var(--muted); font-size: 15px; line-height: 1.7; }
+.sfc-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.tag {
+  font-size: 11px; font-weight: 600; letter-spacing: .5px;
+  background: rgba(139,92,246,.12); border: 1px solid rgba(139,92,246,.2);
+  color: var(--accent); padding: 4px 12px; border-radius: 99px;
+}
+
+/* Process section */
+.process-section { background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 40px; }
+.process-steps { max-width: 1100px; margin: 48px auto 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.step { text-align: center; position: relative; }
+.step::after {
+  content: '→'; position: absolute; top: 18px; right: -20px;
+  color: var(--border); font-size: 20px;
+}
+.step:last-child::after { display: none; }
+.step-num {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--grad); display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-d); font-weight: 700; font-size: 16px; color: #fff;
+  margin-bottom: 16px;
+}
+.step-title { font-family: var(--font-d); font-weight: 700; margin-bottom: 8px; }
+.step-desc { color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+/* Pricing note */
+.pricing-note {
+  max-width: 600px; margin: 60px auto 0; text-align: center;
+  background: rgba(139,92,246,.08); border: 1px solid rgba(139,92,246,.2);
+  border-radius: 16px; padding: 36px;
+}
+.pricing-note h3 { font-family: var(--font-d); font-size: 1.4rem; font-weight: 700; margin-bottom: 12px; }
+.pricing-note p { color: var(--muted); font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
+
+@media (max-width: 900px) {
+  .services-full-grid { grid-template-columns: 1fr; }
+  .process-steps { grid-template-columns: 1fr 1fr; }
+  .step::after { display: none; }
+}
+@media (max-width: 600px) {
+  .services-section { padding: 40px 20px 80px; }
+  .process-section { padding: 60px 20px; }
+  .process-steps { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">prem-ium<span>.inc</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta">Let's Talk</a>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu">☰</button>
+</nav>
+
+<div class="page-hero" style="position:relative;overflow:hidden;" data-particles>
+  <div class="glow-blob" style="width:600px;height:600px;background:radial-gradient(circle,rgba(139,92,246,.12) 0%,transparent 70%);top:-200px;left:50%;transform:translateX(-50%);"></div>
+  <div class="eyebrow" data-reveal>What I Build</div>
+  <h1 data-reveal data-delay=".1">Services that <span class="grad-text">deliver.</span></h1>
+  <p data-reveal data-delay=".2">Everything a local business needs to win online — from first pixel to final deploy.</p>
+</div>
+
+<div class="services-section">
+  <div class="container">
+    <div class="services-full-grid" data-stagger-parent>
+      <div class="svc-full-card" data-stagger-child>
+        <div class="sfc-icon">🎨</div>
+        <div class="sfc-title">Local Business Websites</div>
+        <p class="sfc-desc">Fast, mobile-first sites built for plumbers, salons, auto shops, and every business in between. Custom-designed, not templated — your site actually looks like yours.</p>
+        <div class="sfc-tags"><span class="tag">HTML/CSS/JS</span><span class="tag">Mobile-First</span><span class="tag">SEO Ready</span></div>
+      </div>
+      <div class="svc-full-card" data-stagger-child>
+        <div class="sfc-icon">⚡</div>
+        <div class="sfc-title">Custom Web Applications</div>
+        <p class="sfc-desc">Need something more complex? Client portals, dashboards, booking systems, and internal tools — built clean and deployed reliably.</p>
+        <div class="sfc-tags"><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">GitHub API</span><span class="tag">JWT Auth</span></div>
+      </div>
+      <div class="svc-full-card" data-stagger-child>
+        <div class="sfc-icon">📊</div>
+        <div class="sfc-title">Analytics &amp; SEO</div>
+        <p class="sfc-desc">Google Analytics 4 integrated into every site. Real visitor data — locations, devices, top pages — all surfaced in a clean dashboard built for non-technical owners.</p>
+        <div class="sfc-tags"><span class="tag">GA4</span><span class="tag">SEO Optimization</span><span class="tag">Data Dashboard</span></div>
+      </div>
+      <div class="svc-full-card" data-stagger-child>
+        <div class="sfc-icon">🛒</div>
+        <div class="sfc-title">E-Commerce &amp; Booking</div>
+        <p class="sfc-desc">Simple online stores and booking flows — no Shopify subscription required. Lightweight, custom, exactly what you need.</p>
+        <div class="sfc-tags"><span class="tag">Stripe</span><span class="tag">Custom Checkout</span></div>
+      </div>
+      <div class="svc-full-card" data-stagger-child>
+        <div class="sfc-icon">🖊️</div>
+        <div class="sfc-title">Inline Editing Portal</div>
+        <p class="sfc-desc">Every site I build comes with a client portal so you can edit text and swap images yourself — directly deployed to GitHub, no developer required for simple changes.</p>
+        <div class="sfc-tags"><span class="tag">Self-Service</span><span class="tag">GitHub Backed</span><span class="tag">Auto-Deploy</span></div>
+      </div>
+      <div class="svc-full-card" data-stagger-child>
+        <div class="sfc-icon">🔧</div>
+        <div class="sfc-title">Ongoing Support</div>
+        <p class="sfc-desc">Updates, new sections, performance fixes — submit a request and I'll handle it. Full version history so you can always roll back.</p>
+        <div class="sfc-tags"><span class="tag">Change Requests</span><span class="tag">Version Control</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="process-section">
+  <div class="container" style="text-align:center">
+    <div class="section-label" data-reveal>The Process</div>
+    <h2 class="section-title" data-reveal data-delay=".05">From idea to live in days.</h2>
+  </div>
+  <div class="process-steps">
+    <div class="step" data-reveal>
+      <div class="step-num">1</div>
+      <div class="step-title">Discover</div>
+      <p class="step-desc">We talk about your business, goals, and what you need from a website.</p>
+    </div>
+    <div class="step" data-reveal data-delay=".1">
+      <div class="step-num">2</div>
+      <div class="step-title">Design</div>
+      <p class="step-desc">Custom layout and content built around your brand — no templates.</p>
+    </div>
+    <div class="step" data-reveal data-delay=".2">
+      <div class="step-num">3</div>
+      <div class="step-title">Build</div>
+      <p class="step-desc">Clean HTML/CSS/JS developed and committed to GitHub with full version history.</p>
+    </div>
+    <div class="step" data-reveal data-delay=".3">
+      <div class="step-num">4</div>
+      <div class="step-title">Deploy</div>
+      <p class="step-desc">Live on Render with auto-deploy on every update. Analytics installed from day one.</p>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+    <div class="pricing-note" data-reveal>
+      <h3>Pricing by project</h3>
+      <p>Every business is different — so is every project. Reach out and describe what you need, and I'll give you a straight answer on timeline and cost.</p>
+      <a href="contact.html" class="btn btn-primary">Get a Quote →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="footer-logo">prem-ium<span>.inc</span></a>
+      <p>Fast, beautiful websites for local businesses — built with care and shipped with pride.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <a href="services.html">Services</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="https://hdt-technologies.onrender.com" target="_blank" rel="noopener">HDT Technologies</a>
+        <a href="https://openclaw-client-portal.onrender.com" target="_blank" rel="noopener">Client Portal</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Prem. All rights reserved.</p>
+    <span class="disclaimer-badge">prem-ium.inc is a personal portfolio, not a registered business</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

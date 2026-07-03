@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | prem-ium.inc</title>
+<meta name="description" content="Reach out to Prem about a website project, collaboration, or just to say hello.">
+<meta property="og:title" content="Contact | prem-ium.inc">
+<meta property="og:description" content="Have a project in mind? Let's talk.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="css/main.css">
+<style>
+.contact-layout {
+  padding: 40px 40px 100px;
+}
+.contact-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+}
+.contact-info h2 { font-family: var(--font-d); font-size: 2.2rem; font-weight: 800; margin-bottom: 16px; }
+.contact-info p { color: var(--muted); font-size: 16px; line-height: 1.75; margin-bottom: 32px; }
+.contact-items { display: flex; flex-direction: column; gap: 16px; }
+.contact-item {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 20px;
+  text-decoration: none; color: var(--text);
+  transition: border-color .2s, box-shadow .2s;
+}
+.contact-item:hover { border-color: var(--accent); box-shadow: 0 4px 20px var(--glow); }
+.contact-item-icon { font-size: 1.4rem; }
+.contact-item-text { font-size: 14px; }
+.contact-item-label { color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+
+/* Form */
+.contact-form {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 20px; padding: 40px;
+}
+.contact-form h3 { font-family: var(--font-d); font-size: 1.4rem; font-weight: 700; margin-bottom: 28px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 13px 16px;
+  color: var(--text); font-family: var(--font-b); font-size: 14px;
+  outline: none; transition: border-color .2s;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--accent); }
+.form-group select { cursor: pointer; }
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-status { font-size: 13px; margin-top: 10px; min-height: 18px; }
+.form-status.success { color: #86efac; }
+.form-status.error { color: #f87171; }
+
+@media (max-width: 900px) {
+  .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+}
+@media (max-width: 600px) {
+  .contact-layout { padding: 20px 20px 80px; }
+  .contact-form { padding: 28px 20px; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">prem-ium<span>.inc</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta">Let's Talk</a>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu">☰</button>
+</nav>
+
+<div class="page-hero" style="position:relative;overflow:hidden;" data-particles>
+  <div class="glow-blob" style="width:600px;height:600px;background:radial-gradient(circle,rgba(139,92,246,.12) 0%,transparent 70%);top:-200px;left:50%;transform:translateX(-50%);"></div>
+  <div class="eyebrow" data-reveal>Get In Touch</div>
+  <h1 data-reveal data-delay=".1">Say <span class="grad-text">Hello.</span></h1>
+  <p data-reveal data-delay=".2">Have a project in mind, a question, or just want to connect? I'd love to hear from you.</p>
+</div>
+
+<div class="contact-layout">
+  <div class="contact-inner">
+    <div class="contact-info" data-reveal>
+      <h2>Let's build something great.</h2>
+      <p>Whether you need a new website, a redesign, or something more complex — describe it to me and I'll tell you honestly what it'll take and how much it'll cost. No pressure, no sales pitch.</p>
+      <div class="contact-items">
+        <a href="mailto:josephbusinesses664@gmail.com" class="contact-item">
+          <span class="contact-item-icon">✉️</span>
+          <div class="contact-item-text">
+            <div class="contact-item-label">Email</div>
+            josephbusinesses664@gmail.com
+          </div>
+        </a>
+        <a href="https://github.com/josephbusinesses664" target="_blank" rel="noopener" class="contact-item">
+          <span class="contact-item-icon">🐙</span>
+          <div class="contact-item-text">
+            <div class="contact-item-label">GitHub</div>
+            josephbusinesses664
+          </div>
+        </a>
+        <a href="https://hdt-technologies.onrender.com" target="_blank" rel="noopener" class="contact-item">
+          <span class="contact-item-icon">🏢</span>
+          <div class="contact-item-text">
+            <div class="contact-item-label">Employer</div>
+            HDT Technologies
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-form" data-reveal data-delay=".1">
+      <h3>Send a message</h3>
+      <form id="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input id="name" type="text" placeholder="Jane Smith" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input id="email" type="email" placeholder="jane@example.com" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="subject">What do you need?</label>
+          <select id="subject">
+            <option value="New website">New business website</option>
+            <option value="Redesign">Redesign existing site</option>
+            <option value="Web app">Custom web application</option>
+            <option value="Analytics">Analytics setup</option>
+            <option value="Other">Something else</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Tell me more</label>
+          <textarea id="message" placeholder="Describe your project, timeline, or just say hi…" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Send Message →</button>
+        <div class="form-status" id="form-status"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="footer-logo">prem-ium<span>.inc</span></a>
+      <p>Fast, beautiful websites for local businesses — built with care and shipped with pride.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <a href="services.html">Services</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="https://hdt-technologies.onrender.com" target="_blank" rel="noopener">HDT Technologies</a>
+        <a href="https://openclaw-client-portal.onrender.com" target="_blank" rel="noopener">Client Portal</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Prem. All rights reserved.</p>
+    <span class="disclaimer-badge">prem-ium.inc is a personal portfolio, not a registered business</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const subject = document.getElementById('subject').value;
+  const message = document.getElementById('message').value.trim();
+  const status = document.getElementById('form-status');
+
+  if (!name || !email || !message) {
+    status.textContent = 'Please fill in all fields.';
+    status.className = 'form-status error';
+    return;
+  }
+
+  const body = encodeURIComponent(`Hi Prem,\n\nMy name is ${name}.\n\nProject: ${subject}\n\n${message}\n\nBest,\n${name}\n${email}`);
+  const mailto = `mailto:josephbusinesses664@gmail.com?subject=${encodeURIComponent(`prem-ium.inc: ${subject} from ${name}`)}&body=${body}`;
+  window.location.href = mailto;
+
+  status.textContent = '✓ Opening your email client…';
+  status.className = 'form-status success';
+});
+</script>
+</body>
+</html>

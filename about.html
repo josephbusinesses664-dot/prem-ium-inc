@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Prem | prem-ium.inc</title>
+<meta name="description" content="Prem is a full-stack web developer and employee at HDT Technologies, building websites for local businesses across California.">
+<meta property="og:title" content="About Prem | prem-ium.inc">
+<meta property="og:description" content="Full-stack developer. Employee at HDT Technologies. Building the web for local businesses.">
+<meta property="og:type" content="profile">
+<link rel="stylesheet" href="css/main.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Prem",
+  "jobTitle": "Full-Stack Web Developer",
+  "worksFor": { "@type": "Organization", "name": "HDT Technologies" },
+  "url": "https://prem-ium-inc.onrender.com/about.html",
+  "description": "Full-stack web developer building websites for local businesses in California."
+}
+</script>
+<style>
+.about-hero {
+  padding: 160px 40px 60px;
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr .8fr; gap: 60px; align-items: center;
+}
+.about-hero h1 {
+  font-family: var(--font-d);
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 800; line-height: 1.05; letter-spacing: -2px;
+  margin-bottom: 24px;
+}
+.about-hero h1 span { display: block; }
+.about-tagline { font-size: 18px; color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
+.about-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+.about-tag {
+  padding: 6px 16px; border-radius: 99px; font-size: 13px; font-weight: 600;
+  background: rgba(139,92,246,.1); border: 1px solid rgba(139,92,246,.2); color: var(--accent);
+}
+.about-img-block { position: relative; }
+.about-img-block img {
+  width: 100%; height: 420px; object-fit: cover;
+  border-radius: 20px;
+}
+.about-img-badge {
+  position: absolute; bottom: -16px; left: -16px;
+  background: var(--grad); color: #fff;
+  font-family: var(--font-d); font-size: 13px; font-weight: 700;
+  padding: 12px 18px; border-radius: 12px;
+  box-shadow: 0 8px 32px var(--glow);
+}
+
+/* Bio */
+.bio-section { padding: 80px 40px; }
+.bio-inner { max-width: 760px; margin: 0 auto; }
+.bio-inner h2 { font-family: var(--font-d); font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+.bio-inner p { color: var(--muted); font-size: 17px; line-height: 1.8; margin-bottom: 20px; }
+
+/* Flower gallery */
+.gallery-section { padding: 0 40px 80px; }
+.gallery-grid {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 14px; height: 420px;
+}
+.gallery-item { border-radius: 16px; overflow: hidden; cursor: default; }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; display: block; }
+.gallery-item:hover img { transform: scale(1.05); }
+
+/* HDT card */
+.hdt-section { padding: 0 40px 80px; }
+.hdt-card {
+  max-width: 600px; margin: 0 auto;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 20px; padding: 36px;
+  display: flex; gap: 24px; align-items: center;
+  transition: border-color .25s, box-shadow .25s;
+}
+.hdt-card:hover { border-color: var(--accent); box-shadow: 0 8px 40px var(--glow); }
+.hdt-icon { font-size: 3rem; flex-shrink: 0; }
+.hdt-info h3 { font-family: var(--font-d); font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
+.hdt-info p { color: var(--muted); font-size: 14px; line-height: 1.65; margin-bottom: 16px; }
+.hdt-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--accent); font-size: 14px; font-weight: 600;
+  text-decoration: none; transition: gap .2s;
+}
+.hdt-link:hover { gap: 10px; }
+
+/* Disclaimer */
+.disclaimer-section { padding: 0 40px 80px; text-align: center; }
+.disclaimer-box {
+  max-width: 540px; margin: 0 auto;
+  background: rgba(139,92,246,.06); border: 1px solid rgba(139,92,246,.15);
+  border-radius: 14px; padding: 28px 32px; color: var(--muted); font-size: 14px; line-height: 1.7;
+}
+.disclaimer-box strong { color: var(--text); }
+
+@media (max-width: 900px) {
+  .about-hero { grid-template-columns: 1fr; padding: 140px 40px 40px; }
+  .about-img-block { display: none; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; height: 280px; }
+  .gallery-grid .gallery-item:last-child { display: none; }
+}
+@media (max-width: 600px) {
+  .about-hero { padding: 130px 20px 40px; }
+  .bio-section, .gallery-section, .hdt-section, .disclaimer-section { padding-left: 20px; padding-right: 20px; }
+  .hdt-card { flex-direction: column; text-align: center; }
+  .gallery-grid { grid-template-columns: 1fr; height: 220px; }
+  .gallery-grid .gallery-item:not(:first-child) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">prem-ium<span>.inc</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta">Let's Talk</a>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu">☰</button>
+</nav>
+
+<div class="about-hero">
+  <div class="about-hero-text" data-reveal>
+    <h1>
+      <span>Hey,</span>
+      <span>I'm <span class="grad-text">Prem.</span></span>
+    </h1>
+    <p class="about-tagline">
+      Full-stack web developer. I build fast, beautiful websites for local businesses —
+      from the first wireframe to the final deploy.
+    </p>
+    <div class="about-tags">
+      <span class="about-tag">Full-Stack Dev</span>
+      <span class="about-tag">UI / UX</span>
+      <span class="about-tag">HTML · CSS · JS</span>
+      <span class="about-tag">Node.js</span>
+      <span class="about-tag">GitHub CI/CD</span>
+    </div>
+  </div>
+  <div class="about-img-block" data-reveal data-delay=".2">
+    <img src="images/flowers/flowerthatswhite.jpg" alt="Nature photography by Prem">
+    <div class="about-img-badge">📍 California</div>
+  </div>
+</div>
+
+<div class="bio-section">
+  <div class="bio-inner">
+    <h2 data-reveal>Who I am.</h2>
+    <p data-reveal data-delay=".05">
+      I'm a full-stack web developer based in California, working at HDT Technologies where I help
+      plan and build production-grade web projects across the full stack. Outside of that, I independently
+      build and manage websites for local businesses — plumbers, salons, auto shops, groomers, and more —
+      giving small businesses a real presence online without the bloat or the big agency price tag.
+    </p>
+    <p data-reveal data-delay=".1">
+      Every site I ship is custom-designed, fast-loading, and backed by GitHub version control with
+      automatic Render deployment. I also build the supporting infrastructure: client portals for
+      self-service edits, Google Analytics dashboards so owners can see who's actually visiting,
+      and Discord alerts when changes go live.
+    </p>
+    <p data-reveal data-delay=".15">
+      I care a lot about the craft — writing clean code, designing things that feel premium, and
+      making sure the people using what I build actually enjoy it. If that sounds like something
+      your business needs, let's talk.
+    </p>
+  </div>
+</div>
+
+<div class="gallery-section">
+  <div class="gallery-grid" data-stagger-parent>
+    <div class="gallery-item" data-stagger-child>
+      <img src="images/flowers/pinkflowerfromtruck.jpg" alt="Pink flower" loading="lazy">
+    </div>
+    <div class="gallery-item" data-stagger-child>
+      <img src="images/flowers/whiteflowernice.JPG" alt="White flower" loading="lazy">
+    </div>
+    <div class="gallery-item" data-stagger-child>
+      <img src="images/flowers/pinnkflower.JPG" alt="Pink bloom" loading="lazy">
+    </div>
+  </div>
+</div>
+
+<div class="hdt-section">
+  <a href="https://hdt-technologies.onrender.com" target="_blank" rel="noopener" class="hdt-card" data-reveal>
+    <div class="hdt-icon">🏢</div>
+    <div class="hdt-info">
+      <h3>HDT Technologies</h3>
+      <p>I work at HDT Technologies — a full-stack software development company. We build websites, web apps, and custom software solutions for clients across the board.</p>
+      <span class="hdt-link">Visit HDT Technologies →</span>
+    </div>
+  </a>
+</div>
+
+<div class="disclaimer-section">
+  <div class="disclaimer-box" data-reveal>
+    <strong>prem-ium.inc is not a registered business.</strong><br>
+    This is Prem's personal portfolio website — a showcase of web development work, skills, and client projects. All client work displayed here was created independently or in a professional capacity.
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="footer-logo">prem-ium<span>.inc</span></a>
+      <p>Fast, beautiful websites for local businesses — built with care and shipped with pride.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <a href="services.html">Services</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="https://hdt-technologies.onrender.com" target="_blank" rel="noopener">HDT Technologies</a>
+        <a href="https://openclaw-client-portal.onrender.com" target="_blank" rel="noopener">Client Portal</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Prem. All rights reserved.</p>
+    <span class="disclaimer-badge">prem-ium.inc is a personal portfolio, not a registered business</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+// Parallax on gallery images
+if (typeof ScrollTrigger !== 'undefined') {
+  document.querySelectorAll('.gallery-item img').forEach((img, i) => {
+    gsap.to(img, {
+      y: i % 2 === 0 ? -30 : 30,
+      ease: 'none',
+      scrollTrigger: { trigger: img, start: 'top bottom', end: 'bottom top', scrub: true }
+    });
+  });
+}
+</script>
+</body>
+</html>

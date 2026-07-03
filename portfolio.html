@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio | prem-ium.inc</title>
+<meta name="description" content="Browse all client websites built by Prem — local businesses across California and beyond.">
+<meta property="og:title" content="Portfolio | prem-ium.inc">
+<meta property="og:description" content="25+ live websites built for local businesses. See the work.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="css/main.css">
+<style>
+.portfolio-section { padding: 40px 40px 100px; }
+.portfolio-controls {
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.search-wrap { flex: 1; min-width: 200px; position: relative; }
+.search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+.search-input {
+  width: 100%; background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px 12px 42px;
+  color: var(--text); font-family: var(--font-b); font-size: 14px; outline: none;
+  transition: border-color .2s;
+}
+.search-input:focus { border-color: var(--accent); }
+.filter-btn {
+  padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  border: 1px solid var(--border); background: none; color: var(--muted);
+  cursor: pointer; transition: all .2s; font-family: var(--font-b);
+}
+.filter-btn.active, .filter-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(139,92,246,.08); }
+
+.portfolio-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;
+}
+.port-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px;
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+}
+.port-card:hover {
+  border-color: var(--accent); transform: translateY(-4px);
+  box-shadow: 0 10px 40px var(--glow);
+}
+.port-badge {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  letter-spacing: .5px; text-transform: uppercase;
+  background: rgba(139,92,246,.12); color: var(--accent);
+  border: 1px solid rgba(139,92,246,.2);
+  padding: 3px 10px; border-radius: 99px; margin-bottom: 14px;
+}
+.port-name { font-family: var(--font-d); font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+.port-city { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+.port-actions { display: flex; gap: 10px; }
+.port-btn {
+  flex: 1; padding: 9px 0; border-radius: 8px; font-size: 13px; font-weight: 600;
+  text-align: center; text-decoration: none; display: block;
+  transition: all .2s; font-family: var(--font-b); cursor: pointer; border: none;
+}
+.port-btn-primary { background: var(--grad); color: #fff; }
+.port-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px var(--glow); }
+.port-btn-ghost { background: var(--bg-card2); color: var(--muted); border: 1px solid var(--border); }
+.port-btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+.portfolio-empty { text-align: center; padding: 80px 0; color: var(--muted); font-size: 16px; }
+.portfolio-count { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+
+@media (max-width: 600px) {
+  .portfolio-section { padding: 20px 20px 80px; }
+  .portfolio-controls { flex-direction: column; }
+  .search-wrap { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">prem-ium<span>.inc</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta">Let's Talk</a>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu">☰</button>
+</nav>
+
+<div class="page-hero" style="position:relative;overflow:hidden;" data-particles>
+  <div class="glow-blob" style="width:600px;height:600px;background:radial-gradient(circle,rgba(236,72,153,.1) 0%,transparent 70%);top:-200px;left:50%;transform:translateX(-50%);"></div>
+  <div class="eyebrow" data-reveal>The Work</div>
+  <h1 data-reveal data-delay=".1"><span class="grad-text">25+</span> sites built.<br>All live.</h1>
+  <p data-reveal data-delay=".2">Real businesses, real results. Browse every site I've shipped.</p>
+</div>
+
+<div class="portfolio-section">
+  <div class="container">
+    <div class="portfolio-controls">
+      <div class="search-wrap">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" id="search" type="text" placeholder="Search businesses, cities, categories…" autocomplete="off">
+      </div>
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="Plumbing">Plumbing</button>
+      <button class="filter-btn" data-filter="Alterations">Alterations</button>
+      <button class="filter-btn" data-filter="Auto">Auto</button>
+    </div>
+    <p class="portfolio-count" id="count-label">Loading…</p>
+    <div class="portfolio-grid" id="grid">
+      <div class="portfolio-empty">Loading live sites…</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="footer-logo">prem-ium<span>.inc</span></a>
+      <p>Fast, beautiful websites for local businesses — built with care and shipped with pride.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <a href="services.html">Services</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="https://hdt-technologies.onrender.com" target="_blank" rel="noopener">HDT Technologies</a>
+        <a href="https://openclaw-client-portal.onrender.com" target="_blank" rel="noopener">Client Portal</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Prem. All rights reserved.</p>
+    <span class="disclaimer-badge">prem-ium.inc is a personal portfolio, not a registered business</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+const PORTAL = 'https://openclaw-client-portal.onrender.com/api/sites';
+let allSites = {};
+let activeFilter = 'all';
+
+async function load() {
+  try {
+    const r = await fetch(PORTAL);
+    allSites = await r.json();
+    render();
+  } catch {
+    document.getElementById('grid').innerHTML = '<div class="portfolio-empty">Could not load sites — try again later.</div>';
+    document.getElementById('count-label').textContent = '';
+  }
+}
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const entries = Object.entries(allSites).filter(([, s]) => {
+    const matchSearch = !q || (s.business + s.city + s.category).toLowerCase().includes(q);
+    const matchFilter = activeFilter === 'all' || (s.category || '').includes(activeFilter);
+    return matchSearch && matchFilter;
+  });
+
+  document.getElementById('count-label').textContent = `${entries.length} site${entries.length !== 1 ? 's' : ''} found`;
+
+  if (!entries.length) {
+    document.getElementById('grid').innerHTML = '<div class="portfolio-empty">No sites match your search.</div>';
+    return;
+  }
+
+  document.getElementById('grid').innerHTML = entries.map(([slug, s]) => `
+    <div class="port-card">
+      <span class="port-badge">${s.category || 'Business'}</span>
+      <div class="port-name">${s.business}</div>
+      <div class="port-city">📍 ${s.city || 'California'}</div>
+      <div class="port-actions">
+        <a class="port-btn port-btn-primary" href="${s.renderUrl}" target="_blank" rel="noopener">View Live ↗</a>
+        <a class="port-btn port-btn-ghost" href="https://openclaw-client-portal.onrender.com/login" target="_blank" rel="noopener">Client Login</a>
+      </div>
+    </div>
+  `).join('');
+
+  // Animate cards in
+  if (typeof gsap !== 'undefined') {
+    gsap.fromTo('#grid .port-card', { opacity:0, y:30 }, { opacity:1, y:0, duration:.5, stagger:.05, ease:'power2.out' });
+  }
+}
+
+document.getElementById('search').addEventListener('input', render);
+
+document.querySelectorAll('[data-filter]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+load();
+</script>
+</body>
+</html>

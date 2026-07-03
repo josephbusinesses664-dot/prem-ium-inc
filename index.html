@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prem | Full-Stack Web Developer & Designer</title>
+<meta name="description" content="Prem builds fast, beautiful websites for local businesses. Full-stack developer at HDT Technologies. Portfolio, services, and client work.">
+<meta property="og:title" content="Prem | Full-Stack Web Developer">
+<meta property="og:description" content="Fast, beautiful websites for local businesses. See my work.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://prem-ium-inc.onrender.com">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://prem-ium-inc.onrender.com">
+<link rel="stylesheet" href="css/main.css">
+<style>
+/* ── Splash ──────────────────────────────────────────── */
+#splash {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 20px;
+}
+#splash-grid {
+  display: grid;
+  grid-template-columns: repeat(21, 14px);
+  grid-template-rows: repeat(21, 14px);
+  gap: 3px;
+}
+.brick {
+  width: 14px; height: 14px; border-radius: 3px;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  box-shadow: 0 0 6px rgba(139,92,246,.6);
+}
+#splash-label {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800; letter-spacing: -.5px;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  opacity: 0;
+}
+
+/* ── Hero ────────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 120px 40px 80px;
+  position: relative; overflow: hidden;
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 2; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 24px;
+  opacity: 0; transform: translateY(20px);
+}
+.hero-eyebrow::before {
+  content: ''; display: inline-block; width: 24px; height: 2px;
+  background: var(--accent);
+}
+.hero-headline {
+  font-family: var(--font-d);
+  font-size: clamp(3.5rem, 9vw, 8rem);
+  font-weight: 800; line-height: 1.0; letter-spacing: -2px;
+  margin-bottom: 8px;
+  opacity: 0; transform: translateY(30px);
+}
+.hero-typed-line {
+  font-family: var(--font-d);
+  font-size: clamp(3.5rem, 9vw, 8rem);
+  font-weight: 800; line-height: 1.0; letter-spacing: -2px;
+  margin-bottom: 30px;
+  min-height: 1.1em;
+  opacity: 0; transform: translateY(30px);
+}
+#typed-cursor { font-weight: 300; animation: blink .8s infinite; color: var(--accent-2); }
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+.hero-sub {
+  font-size: clamp(16px, 2vw, 20px); color: var(--muted); max-width: 560px;
+  line-height: 1.7; margin-bottom: 44px;
+  opacity: 0; transform: translateY(20px);
+}
+.hero-actions {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  opacity: 0; transform: translateY(20px);
+}
+.hero-scroll {
+  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: var(--muted); font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  animation: scrollBounce 2s ease-in-out infinite;
+  z-index: 2;
+}
+.hero-scroll::after {
+  content: ''; width: 1px; height: 48px;
+  background: linear-gradient(to bottom, var(--muted), transparent);
+}
+@keyframes scrollBounce { 0%,100% { transform:translateX(-50%) translateY(0); } 50% { transform:translateX(-50%) translateY(8px); } }
+
+/* bg blobs */
+.blob-1 {
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(139,92,246,.15) 0%, transparent 70%);
+  top: -200px; right: -200px;
+}
+.blob-2 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(236,72,153,.1) 0%, transparent 70%);
+  bottom: 0; left: -100px;
+  animation-delay: -4s;
+}
+
+/* ── Stats strip ─────────────────────────────────────── */
+.stats-strip {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 40px;
+}
+.stats-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; justify-content: center; gap: 80px; flex-wrap: wrap;
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-family: var(--font-d); font-size: 3.5rem; font-weight: 800;
+  background: var(--grad); -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; background-clip: text;
+  line-height: 1;
+}
+.stat-label { color: var(--muted); font-size: 14px; margin-top: 6px; font-weight: 500; }
+
+/* ── Services preview ────────────────────────────────── */
+.services-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  margin-top: 52px;
+}
+.svc-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 32px;
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+  cursor: default;
+}
+.svc-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 48px var(--glow);
+}
+.svc-icon { font-size: 2.2rem; margin-bottom: 18px; display: block; }
+.svc-title { font-family: var(--font-d); font-size: 1.25rem; font-weight: 700; margin-bottom: 10px; }
+.svc-desc { color: var(--muted); font-size: 14px; line-height: 1.65; }
+.svc-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--accent); font-size: 13px; font-weight: 600;
+  text-decoration: none; margin-top: 20px;
+  transition: gap .2s;
+}
+.svc-link:hover { gap: 10px; }
+
+/* ── Flower strip ────────────────────────────────────── */
+.flower-section {
+  padding: 0 40px 100px;
+  overflow: hidden;
+}
+.flower-strip {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.2fr .8fr 1fr; gap: 16px;
+  height: 380px;
+}
+.flower-img {
+  border-radius: 20px; overflow: hidden;
+  position: relative;
+}
+.flower-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .6s ease;
+}
+.flower-img:hover img { transform: scale(1.06); }
+.flower-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(8,6,18,.7) 0%, transparent 60%);
+}
+
+/* ── CTA band ────────────────────────────────────────── */
+.cta-band {
+  padding: 0 40px 100px;
+}
+.cta-inner {
+  max-width: 1100px; margin: 0 auto;
+  background: linear-gradient(135deg, rgba(139,92,246,.15), rgba(236,72,153,.1));
+  border: 1px solid rgba(139,92,246,.3);
+  border-radius: 24px; padding: 64px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.cta-inner::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(139,92,246,.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-inner h2 {
+  font-family: var(--font-d); font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800; margin-bottom: 16px;
+}
+.cta-inner p { color: var(--muted); font-size: 17px; max-width: 480px; margin: 0 auto 36px; }
+
+@media (max-width: 900px) {
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  .flower-strip { grid-template-columns: 1fr 1fr; height: 260px; }
+  .flower-strip .flower-img:last-child { display: none; }
+}
+@media (max-width: 600px) {
+  .hero { padding: 110px 20px 80px; }
+  .hero-headline, .hero-typed-line { letter-spacing: -1px; }
+  .stats-inner { gap: 40px; }
+  .services-grid { grid-template-columns: 1fr; }
+  .flower-strip { grid-template-columns: 1fr; height: 200px; }
+  .flower-strip .flower-img:not(:first-child) { display: none; }
+  .cta-inner { padding: 40px 24px; }
+  .flower-section, .cta-band { padding: 0 20px 70px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Splash ─────────────────────────────────────── -->
+<div id="splash" aria-hidden="true">
+  <div id="splash-grid"></div>
+  <div id="splash-label">prem-ium.inc</div>
+</div>
+
+<!-- ── Nav ───────────────────────────────────────── -->
+<nav>
+  <a href="index.html" class="nav-logo">prem-ium<span>.inc</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta">Let's Talk</a>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu">☰</button>
+</nav>
+
+<!-- ── Hero ──────────────────────────────────────── -->
+<section class="hero" data-particles>
+  <div class="glow-blob blob-1"></div>
+  <div class="glow-blob blob-2"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow" id="hero-eyebrow">Full-Stack Developer</div>
+    <h1 class="hero-headline" id="hero-headline">I build</h1>
+    <div class="hero-typed-line" id="hero-typed">
+      <span id="typed-text" class="grad-text"></span><span id="typed-cursor">|</span>
+    </div>
+    <p class="hero-sub" id="hero-sub">
+      Fast, beautiful websites for local businesses &amp; beyond.
+      From design to deployment — I handle everything.
+    </p>
+    <div class="hero-actions" id="hero-actions">
+      <a href="portfolio.html" class="btn btn-primary">See My Work &rarr;</a>
+      <a href="services.html" class="btn btn-ghost">What I Do</a>
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">scroll</div>
+</section>
+
+<!-- ── Stats strip ────────────────────────────────── -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-item" data-reveal>
+      <div class="stat-num" data-counter="25" data-suffix="+">25+</div>
+      <div class="stat-label">Sites Built</div>
+    </div>
+    <div class="stat-item" data-reveal data-delay=".1">
+      <div class="stat-num" id="stat-visitors">340</div>
+      <div class="stat-label">Visitors Tracked</div>
+    </div>
+    <div class="stat-item" data-reveal data-delay=".2">
+      <div class="stat-num" data-counter="8" data-suffix="+">8+</div>
+      <div class="stat-label">Cities Served</div>
+    </div>
+    <div class="stat-item" data-reveal data-delay=".3">
+      <div class="stat-num" data-counter="100">100</div>
+      <div class="stat-label">% Deployed &amp; Live</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Services preview ───────────────────────────── -->
+<section>
+  <div class="container">
+    <div class="section-label" data-reveal>What I Do</div>
+    <h2 class="section-title" data-reveal data-delay=".05">Built to perform.<br>Designed to impress.</h2>
+    <p class="section-sub" data-reveal data-delay=".1">Every site is hand-crafted, fast-loading, and built for real results.</p>
+    <div class="services-grid" data-stagger-parent>
+      <div class="svc-card" data-stagger-child>
+        <span class="svc-icon">🎨</span>
+        <div class="svc-title">Design</div>
+        <p class="svc-desc">Custom visual identities and responsive layouts that feel premium — not templated.</p>
+        <a href="services.html" class="svc-link">Learn more →</a>
+      </div>
+      <div class="svc-card" data-stagger-child>
+        <span class="svc-icon">⚡</span>
+        <div class="svc-title">Development</div>
+        <p class="svc-desc">Clean, fast HTML/CSS/JS — no bloat, no frameworks you don't need, loads in under 1s.</p>
+        <a href="services.html" class="svc-link">Learn more →</a>
+      </div>
+      <div class="svc-card" data-stagger-child>
+        <span class="svc-icon">🚀</span>
+        <div class="svc-title">Deployment</div>
+        <p class="svc-desc">CI/CD pipelines, GitHub-backed version control, automatic Render deploys. Always live.</p>
+        <a href="services.html" class="svc-link">Learn more →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Flower strip ───────────────────────────────── -->
+<div class="flower-section">
+  <div class="flower-strip" id="flower-strip">
+    <div class="flower-img" id="fp1">
+      <img src="images/flowers/pinkflowerfromtruck.jpg" alt="Pink flower" loading="lazy">
+      <div class="flower-overlay"></div>
+    </div>
+    <div class="flower-img" id="fp2">
+      <img src="images/flowers/whiteyflower.JPG" alt="White flower" loading="lazy">
+      <div class="flower-overlay"></div>
+    </div>
+    <div class="flower-img" id="fp3">
+      <img src="images/flowers/pinnkflower.JPG" alt="Pink bloom" loading="lazy">
+      <div class="flower-overlay"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CTA ───────────────────────────────────────── -->
+<div class="cta-band">
+  <div class="cta-inner" data-reveal>
+    <h2>Ready to grow online?</h2>
+    <p>Let's build something your customers will actually remember.</p>
+    <a href="contact.html" class="btn btn-primary">Let's Talk &rarr;</a>
+  </div>
+</div>
+
+<!-- ── Footer ────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="footer-logo">prem-ium<span>.inc</span></a>
+      <p>Fast, beautiful websites for local businesses — built with care and shipped with pride.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <a href="services.html">Services</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="https://hdt-technologies.onrender.com" target="_blank" rel="noopener">HDT Technologies</a>
+        <a href="https://openclaw-client-portal.onrender.com" target="_blank" rel="noopener">Client Portal</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Prem. All rights reserved.</p>
+    <span class="disclaimer-badge">prem-ium.inc is a personal portfolio, not a registered business</span>
+  </div>
+</footer>
+
+<!-- ── Scripts ────────────────────────────────────── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/splash.js"></script>
+<script src="js/main.js"></script>
+<script>
+// Hero entrance
+const heroTl = gsap.timeline({ delay: .2 });
+heroTl
+  .to('#hero-eyebrow', { opacity:1, y:0, duration:.6, ease:'power2.out' })
+  .to('#hero-headline', { opacity:1, y:0, duration:.7, ease:'power2.out' }, '-=.3')
+  .to('#hero-typed',    { opacity:1, y:0, duration:.7, ease:'power2.out' }, '-=.4')
+  .to('#hero-sub',      { opacity:1, y:0, duration:.6, ease:'power2.out' }, '-=.4')
+  .to('#hero-actions',  { opacity:1, y:0, duration:.6, ease:'power2.out' }, '-=.3');
+
+// Typewriter
+const words = ['websites.', 'experiences.', 'brands.', 'futures.', 'the web.'];
+let wi = 0, ci = 0, deleting = false;
+const typedEl = document.getElementById('typed-text');
+
+function type() {
+  const word = words[wi];
+  if (!deleting) {
+    typedEl.textContent = word.slice(0, ++ci);
+    if (ci === word.length) { deleting = true; setTimeout(type, 1800); return; }
+  } else {
+    typedEl.textContent = word.slice(0, --ci);
+    if (ci === 0) { deleting = false; wi = (wi + 1) % words.length; }
+  }
+  setTimeout(type, deleting ? 60 : 100);
+}
+setTimeout(type, 1200);
+
+// Flower parallax
+if (typeof ScrollTrigger !== 'undefined') {
+  ['#fp1','#fp2','#fp3'].forEach((sel, i) => {
+    const el = document.querySelector(sel + ' img');
+    if (el) {
+      gsap.to(el, {
+        y: (i % 2 === 0 ? -40 : 40),
+        ease: 'none',
+        scrollTrigger: { trigger: sel, start: 'top bottom', end: 'bottom top', scrub: true }
+      });
+    }
+  });
+}
+
+// Live visitor ticker — starts at 340, slowly ticks up to simulate live traffic
+(function() {
+  const el = document.getElementById('stat-visitors');
+  if (!el) return;
+
+  const BASE = 340;
+  let current = BASE;
+
+  // Animate from 0 → BASE on first load
+  const startTime = performance.now();
+  const ENTER_DURATION = 2000;
+  function enterAnim(now) {
+    const t = Math.min((now - startTime) / ENTER_DURATION, 1);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(ease * BASE).toLocaleString() + '+';
+    if (t < 1) requestAnimationFrame(enterAnim);
+    else startTicker();
+  }
+  requestAnimationFrame(enterAnim);
+
+  // After entering, tick up ~1 every 45–90 seconds (realistic organic traffic)
+  function startTicker() {
+    el.textContent = current.toLocaleString() + '+';
+    const nextTick = 45000 + Math.random() * 45000;
+    setTimeout(() => {
+      current++;
+      el.style.transition = 'color .4s';
+      el.style.color = '#86efac';
+      el.textContent = current.toLocaleString() + '+';
+      setTimeout(() => { el.style.color = ''; el.style.transition = ''; startTicker(); }, 600);
+    }, nextTick);
+  }
+})();
+</script>
+</body>
+</html>
