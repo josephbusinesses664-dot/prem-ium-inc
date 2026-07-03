@@ -107,6 +107,8 @@
       <button class="filter-btn" data-filter="Plumbing">Plumbing</button>
       <button class="filter-btn" data-filter="Alterations">Alterations</button>
       <button class="filter-btn" data-filter="Auto">Auto</button>
+      <button class="filter-btn" data-filter="Pet">Pet</button>
+      <button class="filter-btn" data-filter="Repair">Repair</button>
     </div>
     <p class="portfolio-count" id="count-label">Loading…</p>
     <div class="portfolio-grid" id="grid">
@@ -146,16 +148,71 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="js/main.js"></script>
 <script>
+const GH_USER = 'josephbusinesses664-dot';
 const PORTAL = 'https://openclaw-client-portal.onrender.com/api/sites';
-let allSites = {};
+
+// Non-client repos to exclude
+const EXCLUDE = new Set(['openclaw-client-portal','prem-ium-inc','ChurchApp','ChurchApp1','churchapp-preview','preview-hddt01','preview-3jksfy','preview-qhwxg2','preview-vgbn1y','preview-zg7rb9','preview-']);
+
+// Infer category from business name/description
+function inferCategory(name) {
+  const n = name.toLowerCase();
+  if (n.includes('plumb') || n.includes('heating') || n.includes('hvac') || n.includes('fire suppression')) return 'Plumbing / HVAC';
+  if (n.includes('alteration') || n.includes('tailor') || n.includes('seamstress') || n.includes('tapiceria')) return 'Alterations';
+  if (n.includes('auto') || n.includes('exhaust') || n.includes('muffler') || n.includes('detailing') || n.includes('upholstery')) return 'Auto';
+  if (n.includes('groom') || n.includes('pet')) return 'Pet';
+  if (n.includes('shoe') || n.includes('watch') || n.includes('jewelry') || n.includes('lock') || n.includes('repair')) return 'Repair';
+  if (n.includes('science') || n.includes('tech')) return 'Tech';
+  return 'Business';
+}
+
+let allSites = [];
+let portalData = {};
 let activeFilter = 'all';
 
 async function load() {
   try {
-    const r = await fetch(PORTAL);
-    allSites = await r.json();
+    // Fetch GitHub repos and portal data in parallel
+    const [ghResp, portalResp] = await Promise.allSettled([
+      fetch(`https://api.github.com/users/${GH_USER}/repos?per_page=100&sort=updated`),
+      fetch(PORTAL)
+    ]);
+
+    if (portalResp.status === 'fulfilled' && portalResp.value.ok) {
+      portalData = await portalResp.value.json();
+    }
+
+    if (ghResp.status === 'fulfilled' && ghResp.value.ok) {
+      const repos = await ghResp.value.json();
+      // Build lookup: githubRepo name -> portal site data
+      const repoToPortal = {};
+      for (const [, s] of Object.entries(portalData)) {
+        if (s.githubRepo) repoToPortal[s.githubRepo] = s;
+      }
+
+      allSites = repos
+        .filter(r => !EXCLUDE.has(r.name) && r.name.startsWith('preview-') && r.description)
+        .map(r => {
+          const portal = repoToPortal[r.name] || {};
+          const businessName = portal.business
+            || r.description.replace(/ preview site$/i, '').replace(/ - Auto-generated preview website$/i, '');
+          return {
+            name: r.name,
+            business: businessName,
+            city: portal.city || 'California',
+            category: portal.category || inferCategory(businessName),
+            renderUrl: portal.renderUrl || `https://${r.name}.onrender.com`,
+            updatedAt: r.updated_at,
+            ghUrl: r.html_url
+          };
+        })
+        .sort((a, b) => a.business.localeCompare(b.business));
+    } else {
+      throw new Error('GitHub API failed');
+    }
+
     render();
-  } catch {
+  } catch (err) {
     document.getElementById('grid').innerHTML = '<div class="portfolio-empty">Could not load sites — try again later.</div>';
     document.getElementById('count-label').textContent = '';
   }
@@ -163,39 +220,37 @@ async function load() {
 
 function render() {
   const q = document.getElementById('search').value.toLowerCase();
-  const entries = Object.entries(allSites).filter(([, s]) => {
+  const filtered = allSites.filter(s => {
     const matchSearch = !q || (s.business + s.city + s.category).toLowerCase().includes(q);
-    const matchFilter = activeFilter === 'all' || (s.category || '').includes(activeFilter);
+    const matchFilter = activeFilter === 'all' || s.category.toLowerCase().includes(activeFilter.toLowerCase());
     return matchSearch && matchFilter;
   });
 
-  document.getElementById('count-label').textContent = `${entries.length} site${entries.length !== 1 ? 's' : ''} found`;
+  document.getElementById('count-label').textContent = `${filtered.length} site${filtered.length !== 1 ? 's' : ''} found`;
 
-  if (!entries.length) {
+  if (!filtered.length) {
     document.getElementById('grid').innerHTML = '<div class="portfolio-empty">No sites match your search.</div>';
     return;
   }
 
-  document.getElementById('grid').innerHTML = entries.map(([slug, s]) => `
+  document.getElementById('grid').innerHTML = filtered.map(s => `
     <div class="port-card">
-      <span class="port-badge">${s.category || 'Business'}</span>
+      <span class="port-badge">${s.category}</span>
       <div class="port-name">${s.business}</div>
-      <div class="port-city">📍 ${s.city || 'California'}</div>
+      <div class="port-city">📍 ${s.city}</div>
       <div class="port-actions">
         <a class="port-btn port-btn-primary" href="${s.renderUrl}" target="_blank" rel="noopener">View Live ↗</a>
-        <a class="port-btn port-btn-ghost" href="https://openclaw-client-portal.onrender.com/login" target="_blank" rel="noopener">Client Login</a>
+        <a class="port-btn port-btn-ghost" href="${s.ghUrl}" target="_blank" rel="noopener">GitHub ↗</a>
       </div>
     </div>
   `).join('');
 
-  // Animate cards in
   if (typeof gsap !== 'undefined') {
-    gsap.fromTo('#grid .port-card', { opacity:0, y:30 }, { opacity:1, y:0, duration:.5, stagger:.05, ease:'power2.out' });
+    gsap.fromTo('#grid .port-card', { opacity:0, y:30 }, { opacity:1, y:0, duration:.5, stagger:.04, ease:'power2.out' });
   }
 }
 
 document.getElementById('search').addEventListener('input', render);
-
 document.querySelectorAll('[data-filter]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
