@@ -58,16 +58,6 @@
 .bio-inner h2 { font-family: var(--font-d); font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
 .bio-inner p { color: var(--muted); font-size: 17px; line-height: 1.8; margin-bottom: 20px; }
 
-/* Flower gallery */
-.gallery-section { padding: 0 40px 80px; }
-.gallery-grid {
-  max-width: 1100px; margin: 0 auto;
-  display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 14px; height: 420px;
-}
-.gallery-item { border-radius: 16px; overflow: hidden; cursor: default; }
-.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; display: block; }
-.gallery-item:hover img { transform: scale(1.05); }
-
 /* HDT card */
 .hdt-section { padding: 0 40px 80px; }
 .hdt-card {
@@ -100,15 +90,11 @@
 @media (max-width: 900px) {
   .about-hero { grid-template-columns: 1fr; padding: 140px 40px 40px; }
   .about-img-block { display: none; }
-  .gallery-grid { grid-template-columns: 1fr 1fr; height: 280px; }
-  .gallery-grid .gallery-item:last-child { display: none; }
 }
 @media (max-width: 600px) {
   .about-hero { padding: 130px 20px 40px; }
-  .bio-section, .gallery-section, .hdt-section, .disclaimer-section { padding-left: 20px; padding-right: 20px; }
+  .bio-section, .hdt-section, .disclaimer-section { padding-left: 20px; padding-right: 20px; }
   .hdt-card { flex-direction: column; text-align: center; }
-  .gallery-grid { grid-template-columns: 1fr; height: 220px; }
-  .gallery-grid .gallery-item:not(:first-child) { display: none; }
 }
 </style>
 </head>
@@ -175,19 +161,6 @@
   </div>
 </div>
 
-<div class="gallery-section">
-  <div class="gallery-grid" data-stagger-parent>
-    <div class="gallery-item" data-stagger-child>
-      <img src="images/flowers/pinkflowerfromtruck.jpg" alt="Pink flower" loading="lazy">
-    </div>
-    <div class="gallery-item" data-stagger-child>
-      <img src="images/flowers/whiteflowernice.JPG" alt="White flower" loading="lazy">
-    </div>
-    <div class="gallery-item" data-stagger-child>
-      <img src="images/flowers/pinnkflower.JPG" alt="Pink bloom" loading="lazy">
-    </div>
-  </div>
-</div>
 
 <div class="hdt-section">
   <a href="https://hdt-technologies.onrender.com" target="_blank" rel="noopener" class="hdt-card" data-reveal>
@@ -237,17 +210,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="js/main.js"></script>
-<script>
-// Parallax on gallery images
-if (typeof ScrollTrigger !== 'undefined') {
-  document.querySelectorAll('.gallery-item img').forEach((img, i) => {
-    gsap.to(img, {
-      y: i % 2 === 0 ? -30 : 30,
-      ease: 'none',
-      scrollTrigger: { trigger: img, start: 'top bottom', end: 'bottom top', scrub: true }
-    });
-  });
-}
-</script>
 </body>
 </html>
