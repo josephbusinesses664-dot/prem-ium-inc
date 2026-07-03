@@ -83,8 +83,8 @@ if (counters.length) {
   counters.forEach(c => obs.observe(c));
 }
 
-// Spawn floating particles in a container
-function spawnParticles(container, count = 25) {
+// Floating particles for inner page heroes
+function spawnParticles(container, count = 60) {
   for (let i = 0; i < count; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
@@ -94,7 +94,7 @@ function spawnParticles(container, count = 25) {
       bottom: -10px;
       width: ${size}px; height: ${size}px;
       animation-duration: ${Math.random() * 15 + 10}s;
-      animation-delay: ${Math.random() * 10}s;
+      animation-delay: -${Math.random() * 20}s;
       --dx: ${(Math.random() - .5) * 200}px;
       opacity: ${Math.random() * .4 + .1};
       background: ${Math.random() > .5 ? 'var(--accent)' : 'var(--accent-2)'};
@@ -102,4 +102,81 @@ function spawnParticles(container, count = 25) {
     container.appendChild(p);
   }
 }
-document.querySelectorAll('[data-particles]').forEach(c => spawnParticles(c, 60));
+document.querySelectorAll('[data-particles]').forEach(c => spawnParticles(c));
+
+// Glass bubbles for the homepage hero
+function spawnBubbles(container, count = 34) {
+  const h = () => container.offsetHeight + 120;
+
+  for (let i = 0; i < count; i++) {
+    const size    = 10 + Math.random() * 54;          // 10–64px
+    const dur     = 14 + Math.random() * 24;           // 14–38s per cycle
+    const startFr = Math.random();                      // random starting height
+    const sway    = (20 + Math.random() * 52) * (Math.random() > .5 ? 1 : -1);
+    const alpha   = .12 + Math.random() * .18;
+
+    // Wrapper: GSAP controls x+y transforms
+    const wrap = document.createElement('div');
+    wrap.style.cssText = `
+      position:absolute;
+      left:${Math.random() * 94}%;
+      bottom:-${size + 10}px;
+      width:${size}px; height:${size}px;
+      pointer-events:none; opacity:0;
+    `;
+
+    // Inner: glassy bubble visual + CSS wobble
+    const bubble = document.createElement('div');
+    bubble.style.cssText = `
+      width:100%; height:100%; border-radius:50%;
+      background: radial-gradient(circle at 32% 28%,
+        rgba(255,255,255,.22) 0%,
+        rgba(139,92,246,.07) 48%,
+        rgba(236,72,153,.04) 100%);
+      border: 1px solid rgba(139,92,246,${alpha});
+      box-shadow: inset 0 -3px 8px rgba(139,92,246,.13), 0 3px 16px rgba(139,92,246,.07);
+      animation: bubbleWobble ${2 + Math.random() * 2.6}s ease-in-out ${Math.random() * 2}s infinite;
+    `;
+
+    // Specular highlight
+    const hl = document.createElement('div');
+    hl.style.cssText = `
+      position:absolute; border-radius:50%;
+      width:27%; height:17%; top:18%; left:20%;
+      background:rgba(255,255,255,.32); filter:blur(2px);
+      pointer-events:none;
+    `;
+    bubble.appendChild(hl);
+    wrap.appendChild(bubble);
+    container.appendChild(wrap);
+
+    // Rise animation — recursively restarts from bottom after each cycle
+    function rise(fromY, duration) {
+      gsap.fromTo(wrap,
+        { y: fromY },
+        {
+          y: -h(),
+          duration,
+          ease: 'none',
+          onUpdate() {
+            const p = this.progress();
+            // Fade in over first 7%, fade out over last 12%
+            wrap.style.opacity = Math.min(p / .07, 1) * (1 - Math.max((p - .88) / .12, 0));
+          },
+          onComplete() { rise(0, dur); },
+        }
+      );
+    }
+    rise(-h() * startFr, dur * (1 - startFr));
+
+    // Sinusoidal horizontal sway — GSAP merges x with the y above
+    gsap.to(wrap, {
+      x: sway,
+      duration: 2.4 + Math.random() * 4.2,
+      ease: 'sine.inOut',
+      yoyo: true,
+      repeat: -1,
+    });
+  }
+}
+document.querySelectorAll('[data-bubbles]').forEach(c => spawnBubbles(c));
