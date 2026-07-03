@@ -86,7 +86,7 @@
   </ul>
   <a href="https://openclaw-client-portal.onrender.com" target="_blank" rel="noopener" class="nav-cta" style="background:transparent;border:1px solid var(--border);color:var(--muted)">Client Portal</a>
   <a href="contact.html" class="nav-cta">Let's Talk</a>
-  <button class="nav-toggle" id="nav-toggle" aria-label="Menu">☰</button>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu"></button>
 </nav>
 
 <div class="page-hero" style="position:relative;overflow:hidden;" data-particles>
@@ -237,7 +237,7 @@ function render() {
     <div class="port-card">
       <span class="port-badge">${s.category}</span>
       <div class="port-name">${s.business}</div>
-      <div class="port-city">📍 ${s.city}</div>
+      <div class="port-city"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:3px;opacity:.7"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>${s.city}</div>
       <div class="port-actions">
         <a class="port-btn port-btn-primary" href="${s.renderUrl}" target="_blank" rel="noopener">View Live ↗</a>
         <a class="port-btn port-btn-ghost" href="${s.ghUrl}" target="_blank" rel="noopener">GitHub ↗</a>

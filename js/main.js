@@ -7,9 +7,13 @@ window.addEventListener('scroll', () => {
   nav?.classList.toggle('scrolled', window.scrollY > 40);
 });
 
+const ICON_MENU = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg>`;
+const ICON_CLOSE = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`;
+if (navToggle) navToggle.innerHTML = ICON_MENU;
+
 navToggle?.addEventListener('click', () => {
   navLinks?.classList.toggle('open');
-  navToggle.textContent = navLinks?.classList.contains('open') ? '✕' : '☰';
+  navToggle.innerHTML = navLinks?.classList.contains('open') ? ICON_CLOSE : ICON_MENU;
 });
 
 // Mark active nav link
