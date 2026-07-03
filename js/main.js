@@ -113,7 +113,8 @@ function spawnBubbles(container, count = 34) {
     const dur     = 14 + Math.random() * 24;           // 14–38s per cycle
     const startFr = Math.random();                      // random starting height
     const sway    = (20 + Math.random() * 52) * (Math.random() > .5 ? 1 : -1);
-    const alpha   = .12 + Math.random() * .18;
+    const alpha   = .25 + Math.random() * .3;
+    const glow    = .18 + Math.random() * .22;
 
     // Wrapper: GSAP controls x+y transforms
     const wrap = document.createElement('div');
@@ -125,28 +126,43 @@ function spawnBubbles(container, count = 34) {
       pointer-events:none; opacity:0;
     `;
 
-    // Inner: glassy bubble visual + CSS wobble
+    // Inner: glassy bubble — pink body, lit from top-right
     const bubble = document.createElement('div');
     bubble.style.cssText = `
       width:100%; height:100%; border-radius:50%;
-      background: radial-gradient(circle at 32% 28%,
-        rgba(255,255,255,.22) 0%,
-        rgba(139,92,246,.07) 48%,
-        rgba(236,72,153,.04) 100%);
-      border: 1px solid rgba(139,92,246,${alpha});
-      box-shadow: inset 0 -3px 8px rgba(139,92,246,.13), 0 3px 16px rgba(139,92,246,.07);
+      background: radial-gradient(circle at 70% 18%,
+        rgba(255,255,255,.30) 0%,
+        rgba(236,72,153,.22) 30%,
+        rgba(236,72,153,.10) 60%,
+        rgba(139,92,246,.12) 100%);
+      border: 1px solid rgba(236,72,153,${alpha});
+      box-shadow:
+        inset -3px 3px 8px rgba(236,72,153,.18),
+        0 0 14px rgba(236,72,153,${glow}),
+        0 0 32px rgba(236,72,153,${glow * .5});
       animation: bubbleWobble ${2 + Math.random() * 2.6}s ease-in-out ${Math.random() * 2}s infinite;
     `;
 
-    // Specular highlight
+    // Soft highlight — large, top-right, simulates light source
     const hl = document.createElement('div');
     hl.style.cssText = `
       position:absolute; border-radius:50%;
-      width:27%; height:17%; top:18%; left:20%;
-      background:rgba(255,255,255,.32); filter:blur(2px);
+      width:34%; height:22%; top:10%; left:56%;
+      background:rgba(255,220,240,.55); filter:blur(3px);
       pointer-events:none;
     `;
+
+    // Sharp specular dot — bright pinpoint of the light
+    const hl2 = document.createElement('div');
+    hl2.style.cssText = `
+      position:absolute; border-radius:50%;
+      width:12%; height:9%; top:8%; left:68%;
+      background:rgba(255,255,255,.85); filter:blur(1px);
+      pointer-events:none;
+    `;
+
     bubble.appendChild(hl);
+    bubble.appendChild(hl2);
     wrap.appendChild(bubble);
     container.appendChild(wrap);
 
