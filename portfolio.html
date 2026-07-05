@@ -161,82 +161,121 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="js/main.js?v=6"></script>
 <script>
-const GH_USER = 'josephbusinesses664-dot';
-const PORTAL = 'https://openclaw-client-portal.onrender.com/api/sites';
+const SITES = [
+  {
+    "business": "Cal Plumbing & Fire Suppression Inc.",
+    "city": "Blue Lake, CA",
+    "category": "Plumbing / HVAC",
+    "renderUrl": "https://preview-fgpmte.onrender.com"
+  },
+  {
+    "business": "Gilian's Watch & Jewelry Service",
+    "city": "Sacramento, CA",
+    "category": "Repair",
+    "renderUrl": "https://preview-1ywa4m.onrender.com"
+  },
+  {
+    "business": "Celina's Alterations",
+    "city": "Merced, CA",
+    "category": "Alterations",
+    "renderUrl": "https://preview-kng0mz.onrender.com"
+  },
+  {
+    "business": "Seva Science",
+    "city": "San Diego, CA",
+    "category": "Tech",
+    "renderUrl": "https://preview-8dxvb0.onrender.com"
+  },
+  {
+    "business": "Bellam & Kaaram",
+    "city": "Secunderabad",
+    "category": "Cloud Kitchen",
+    "renderUrl": "https://preview-bellam-kaaram.onrender.com"
+  },
+  {
+    "business": "Castlewood Upholstery Studio",
+    "city": "Chico, CA",
+    "category": "Auto",
+    "renderUrl": "https://preview-fgogv2.onrender.com"
+  },
+  {
+    "business": "Rafaela's Alterations",
+    "city": "Porterville, CA",
+    "category": "Alterations",
+    "renderUrl": "https://preview-h760o7.onrender.com"
+  },
+  {
+    "business": "Saldana's Exhaust and Muffler",
+    "city": "Hanford, CA",
+    "category": "Auto",
+    "renderUrl": "https://preview-is1f0b.onrender.com"
+  },
+  {
+    "business": "North Bay Plumbing",
+    "city": "Fairfield, CA",
+    "category": "Plumbing / HVAC",
+    "renderUrl": "https://preview-ld0y59.onrender.com"
+  },
+  {
+    "business": "Quintana Auto Detailing",
+    "city": "Visalia, CA",
+    "category": "Auto",
+    "renderUrl": "https://preview-le73rr.onrender.com"
+  },
+  {
+    "business": "Central Plumbing & Sewers",
+    "city": "Alameda, CA",
+    "category": "Plumbing / HVAC",
+    "renderUrl": "https://preview-m3kp7x.onrender.com"
+  },
+  {
+    "business": "Mission Alterations",
+    "city": "Fresno, CA",
+    "category": "Alterations",
+    "renderUrl": "https://preview-r1q447.onrender.com"
+  },
+  {
+    "business": "Constantini's Heating & Air Conditioning",
+    "city": "Santa Rosa, CA",
+    "category": "Plumbing / HVAC",
+    "renderUrl": "https://preview-t39zoh.onrender.com"
+  },
+  {
+    "business": "Bob's Shoe Repair",
+    "city": "Turlock, CA",
+    "category": "Repair",
+    "renderUrl": "https://preview-uee4d4.onrender.com"
+  },
+  {
+    "business": "Coleman Plumbing",
+    "city": "Redwood Valley, CA",
+    "category": "Plumbing / HVAC",
+    "renderUrl": "https://preview-vbbr9o.onrender.com"
+  },
+  {
+    "business": "Ocean Alterations & Tailor Service",
+    "city": "Surfside Beach, TX",
+    "category": "Alterations",
+    "renderUrl": "https://preview-vk1b2p.onrender.com"
+  },
+  {
+    "business": "QueSnack",
+    "city": "Hyderabad",
+    "category": "Cloud Kitchen",
+    "renderUrl": "https://preview-quesnack.onrender.com"
+  },
+  {
+    "business": "HDT Technologies",
+    "city": "California",
+    "category": "Tech",
+    "renderUrl": "https://hdt-technologies.onrender.com"
+  }
+];
 
-// Non-client repos to exclude
-const EXCLUDE = new Set(['openclaw-client-portal','prem-ium-inc','ChurchApp','ChurchApp1','churchapp-preview','preview-hddt01','preview-3jksfy','preview-qhwxg2','preview-vgbn1y','preview-zg7rb9','preview-']);
-
-// Infer category from business name/description
-function inferCategory(name) {
-  const n = name.toLowerCase();
-  if (n.includes('plumb') || n.includes('heating') || n.includes('hvac') || n.includes('fire suppression')) return 'Plumbing / HVAC';
-  if (n.includes('alteration') || n.includes('tailor') || n.includes('seamstress') || n.includes('tapiceria')) return 'Alterations';
-  if (n.includes('auto') || n.includes('exhaust') || n.includes('muffler') || n.includes('detailing') || n.includes('upholstery')) return 'Auto';
-  if (n.includes('groom') || n.includes('pet')) return 'Pet';
-  if (n.includes('shoe') || n.includes('watch') || n.includes('jewelry') || n.includes('lock') || n.includes('repair')) return 'Repair';
-  if (n.includes('science') || n.includes('tech')) return 'Tech';
-  return 'Business';
-}
-
-let allSites = [];
-let portalData = {};
+let allSites = SITES.slice().sort((a, b) => a.business.localeCompare(b.business));
 let activeFilter = 'all';
 
-async function load() {
-  try {
-    // Fetch GitHub repos and portal data in parallel
-    const [ghResp, portalResp] = await Promise.allSettled([
-      fetch(`https://api.github.com/users/${GH_USER}/repos?per_page=100&sort=updated`),
-      fetch(PORTAL)
-    ]);
-
-    if (portalResp.status === 'fulfilled' && portalResp.value.ok) {
-      portalData = await portalResp.value.json();
-    }
-
-    if (ghResp.status === 'fulfilled' && ghResp.value.ok) {
-      const repos = await ghResp.value.json();
-      // Build lookup: githubRepo name -> portal site data
-      const repoToPortal = {};
-      for (const [, s] of Object.entries(portalData)) {
-        if (s.githubRepo) repoToPortal[s.githubRepo] = s;
-      }
-
-      const seen = new Set();
-      allSites = repos
-        .filter(r => !EXCLUDE.has(r.name) && r.name.startsWith('preview-') && r.description)
-        .map(r => {
-          const portal = repoToPortal[r.name] || {};
-          const businessName = portal.business
-            || r.description.replace(/ preview site$/i, '').replace(/ - Auto-generated preview website$/i, '');
-          return {
-            name: r.name,
-            business: businessName,
-            city: portal.city || 'California',
-            category: portal.category || inferCategory(businessName),
-            renderUrl: portal.renderUrl || `https://${r.name}.onrender.com`,
-            updatedAt: r.updated_at,
-            ghUrl: r.html_url
-          };
-        })
-        .filter(s => {
-          const key = s.business.toLowerCase().trim();
-          if (seen.has(key)) return false;
-          seen.add(key);
-          return true;
-        })
-        .sort((a, b) => a.business.localeCompare(b.business));
-    } else {
-      throw new Error('GitHub API failed');
-    }
-
-    render();
-  } catch (err) {
-    document.getElementById('grid').innerHTML = '<div class="portfolio-empty">Could not load sites — try again later.</div>';
-    document.getElementById('count-label').textContent = '';
-  }
-}
+function load() { render(); }
 
 function render() {
   const q = document.getElementById('search').value.toLowerCase();
@@ -259,8 +298,7 @@ function render() {
       <div class="port-name">${s.business}</div>
       <div class="port-city"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:3px;opacity:.7"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>${s.city}</div>
       <div class="port-actions">
-        <a class="port-btn port-btn-primary" href="${s.renderUrl}" target="_blank" rel="noopener">View Live ↗</a>
-        <a class="port-btn port-btn-ghost" href="${s.ghUrl}" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="port-btn port-btn-primary" href="${s.renderUrl}" target="_blank" rel="noopener" style="flex:1">View Live Site ↗</a>
       </div>
     </div>
   `).join('');
