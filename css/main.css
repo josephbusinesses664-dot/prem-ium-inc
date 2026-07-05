@@ -113,7 +113,13 @@ nav.scrolled { padding: 10px 40px; }
     z-index: 999;
   }
   .nav-links.open li a { display: block; padding: 16px 0; font-size: 20px; border-bottom: 1px solid var(--border); color: var(--text); }
-  .nav-links.open + .nav-cta { display: none; }
+  /* Surface the CTA buttons inside the open mobile menu (were hidden before) */
+  .nav-links.open ~ .nav-cta {
+    display: block; position: fixed; left: 24px; right: 24px; z-index: 1000;
+    text-align: center; padding: 15px; font-size: 15px;
+  }
+  .nav-links.open ~ .nav-cta:last-of-type { bottom: 40px; }
+  .nav-links.open ~ .nav-cta:nth-last-of-type(2) { bottom: 100px; }
 }
 
 /* ── Footer ────────────────────────────────── */
