@@ -157,6 +157,7 @@
           <label for="message">Tell me more</label>
           <textarea id="message" placeholder="Describe your project, timeline, or just say hi…" required></textarea>
         </div>
+        <input id="company" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Send Message →</button>
         <div class="form-status" id="form-status"></div>
       </form>
@@ -195,13 +196,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="js/main.js?v=5"></script>
 <script>
-document.getElementById('contact-form').addEventListener('submit', function(e) {
+const PORTAL_API = 'https://prem-ium-inc-client-portal.onrender.com/api/contact';
+document.getElementById('contact-form').addEventListener('submit', async function(e) {
   e.preventDefault();
   const name = document.getElementById('name').value.trim();
   const email = document.getElementById('email').value.trim();
   const subject = document.getElementById('subject').value;
   const message = document.getElementById('message').value.trim();
+  const company = document.getElementById('company').value; // honeypot
   const status = document.getElementById('form-status');
+  const btn = e.target.querySelector('button[type="submit"]');
 
   if (!name || !email || !message) {
     status.textContent = 'Please fill in all fields.';
@@ -209,12 +213,28 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
     return;
   }
 
-  const body = encodeURIComponent(`Hi Prem,\n\nMy name is ${name}.\n\nProject: ${subject}\n\n${message}\n\nBest,\n${name}\n${email}`);
-  const mailto = `mailto:josephbusinesses664@gmail.com?subject=${encodeURIComponent(`prem-ium.inc: ${subject} from ${name}`)}&body=${body}`;
-  window.location.href = mailto;
-
-  status.textContent = 'Opening your email client…';
-  status.className = 'form-status success';
+  btn.disabled = true;
+  status.textContent = 'Sending…';
+  status.className = 'form-status';
+  try {
+    const r = await fetch(PORTAL_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message: `[${subject}] ${message}`, kind: 'build', source: 'prem-ium.inc website', company }),
+    });
+    if (!r.ok) throw new Error('send failed');
+    status.textContent = "Thanks! Your message is on its way — I'll get back to you soon.";
+    status.className = 'form-status success';
+    e.target.reset();
+  } catch (err) {
+    // Fallback to email if the API is unreachable
+    const body = encodeURIComponent(`Hi Prem,\n\nMy name is ${name}.\n\nProject: ${subject}\n\n${message}\n\nBest,\n${name}\n${email}`);
+    window.location.href = `mailto:josephbusinesses664@gmail.com?subject=${encodeURIComponent(`prem-ium.inc: ${subject} from ${name}`)}&body=${body}`;
+    status.textContent = 'Opening your email client…';
+    status.className = 'form-status success';
+  } finally {
+    btn.disabled = false;
+  }
 });
 </script>
 </body>
