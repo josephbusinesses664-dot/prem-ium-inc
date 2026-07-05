@@ -1,4 +1,4 @@
-// Heart brick splash — shatter exit
+// Heart brick splash — shatter exit (GPU-cheap: only heart cells, single tweens)
 (function () {
   if (sessionStorage.getItem('splash_done') ||
       window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -6,8 +6,6 @@
     return;
   }
 
-  // Symmetric around col 10: two lobes (rows 2-4) with a single-cell
-  // notch at the top center, then a smooth taper to the point at row 15.
   const HEART = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -36,40 +34,55 @@
   if (!splash) return;
   const grid  = document.getElementById('splash-grid');
   const label = document.getElementById('splash-label');
-  const cells = [], cellMeta = [];
+  const cells = [], meta = [];
 
+  // Only create the ~150 lit cells (positioned on the 21×21 grid) — not all 441.
   HEART.forEach((row, r) => {
     row.forEach((on, c) => {
+      if (!on) return;
       const div = document.createElement('div');
       div.className = 'brick';
-      if (!on) div.style.opacity = '0';
+      div.style.gridColumn = c + 1;
+      div.style.gridRow = r + 1;
       grid.appendChild(div);
-      if (on) {
-        cells.push(div);
-        cellMeta.push({ div, dx: c - 10, dy: r - 8 });
-      }
+      cells.push(div);
+      meta.push({ dx: c - 10, dy: r - 8 });
     });
   });
 
-  // Split label into per-letter spans so they can shatter independently
+  // Per-letter spans so the label can shatter independently
   const raw = label.textContent;
   label.textContent = '';
   raw.split('').forEach(ch => {
     const s = document.createElement('span');
     s.style.cssText = 'display:inline-block;background:linear-gradient(135deg,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;';
-    s.textContent = ch === ' ' ? ' ' : ch;
+    s.textContent = ch === ' ' ? ' ' : ch;
     label.appendChild(s);
   });
   const letters = label.querySelectorAll('span');
 
-  gsap.set(cells, { scale: 0, opacity: 0 });
+  // Precompute each brick's shatter vector once (so the exit is a single tween)
+  const maxDist = Math.sqrt(200);
+  meta.forEach(m => {
+    const dist  = Math.sqrt(m.dx * m.dx + m.dy * m.dy);
+    const angle = Math.atan2(m.dy, m.dx) + (Math.random() - .5) * .45;
+    const force = 220 + dist * 22 + Math.random() * 280;
+    m.tx = Math.cos(angle) * force;
+    m.ty = Math.sin(angle) * force + 120 + Math.random() * 220;
+    m.rot = (Math.random() - .5) * 540;
+    m.sc = Math.random() * .35 + .08;
+    m.dur = 1.1 + Math.random() * .7;
+    m.delay = .01 + (dist / maxDist) * .055 + Math.random() * .025;
+  });
+
+  gsap.set(cells, { scale: 0, opacity: 0, force3D: true });
   const tl = gsap.timeline();
 
-  // ── Build ─────────────────────────────────────────────
+  // ── Build (single tween, staggered from center) ──
   tl.to(cells, {
     scale: 1, opacity: 1,
-    duration: .55,
-    stagger: { amount: 1.8, from: 'center', grid: 'auto' },
+    duration: .55, force3D: true,
+    stagger: { amount: 1.6, from: 'center', grid: [21, 21] },
     ease: 'back.out(1.4)',
   })
   .fromTo(label,
@@ -77,46 +90,30 @@
     { opacity: 1, scale: 1, duration: .55, ease: 'power2.out' },
     '-=.25'
   )
-
-  // ── SHATTER ───────────────────────────────────────────
+  // ── Shatter (single tween for all bricks, function-based per cell) ──
   .add(() => {
-    // Flash origin: center of the grid element (not viewport center —
-    // the label below shifts the grid above the 50% mark)
     const gr = grid.getBoundingClientRect();
     const sr = splash.getBoundingClientRect();
-    const cx = gr.left + gr.width  / 2 - sr.left;
-    const cy = gr.top  + gr.height / 2 - sr.top;
+    const cx = gr.left + gr.width / 2 - sr.left;
+    const cy = gr.top + gr.height / 2 - sr.top;
 
     const flash = document.createElement('div');
     flash.style.cssText = `position:absolute;left:${cx}px;top:${cy}px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95) 0%,rgba(255,255,255,.3) 50%,transparent 72%);transform:translate(-50%,-50%);pointer-events:none;`;
     splash.appendChild(flash);
-    gsap.to(flash, {
-      width: 700, height: 700, opacity: 0,
-      duration: .45, ease: 'power2.out',
-      onComplete: () => flash.remove(),
+    gsap.to(flash, { width: 640, height: 640, opacity: 0, duration: .45, ease: 'power2.out', onComplete: () => flash.remove() });
+
+    gsap.to(cells, {
+      x: i => meta[i].tx,
+      y: i => meta[i].ty,
+      rotationZ: i => meta[i].rot,
+      scale: i => meta[i].sc,
+      opacity: 0,
+      duration: i => meta[i].dur,
+      delay: i => meta[i].delay,
+      ease: 'power2.out',
+      force3D: true,
     });
 
-    // Bricks blast outward — biased downward so they arc toward the label
-    const maxDist = Math.sqrt(10 * 10 + 10 * 10);
-    cellMeta.forEach(({ div, dx, dy }) => {
-      const dist  = Math.sqrt(dx * dx + dy * dy);
-      const angle = Math.atan2(dy, dx) + (Math.random() - .5) * .45;
-      const force = 220 + dist * 22 + Math.random() * 280;
-      const drop  = 120 + Math.random() * 220;
-      const delay = .01 + (dist / maxDist) * .055 + Math.random() * .025;
-      gsap.to(div, {
-        x: Math.cos(angle) * force,
-        y: Math.sin(angle) * force + drop,
-        rotationZ: (Math.random() - .5) * 540,
-        scale: Math.random() * .35 + .08,
-        opacity: 0,
-        duration: 1.1 + Math.random() * .7,  // slower, smoother
-        ease: 'power2.out',                   // decelerates gracefully
-        delay,
-      });
-    });
-
-    // Letters shatter when bricks reach the label area
     gsap.to(letters, {
       y: () => 80 + Math.random() * 180,
       x: () => (Math.random() - .5) * 240,
@@ -130,10 +127,7 @@
 
     gsap.to(splash, {
       opacity: 0, duration: .4, delay: 1.3,
-      onComplete: () => {
-        splash.remove();
-        sessionStorage.setItem('splash_done', '1');
-      },
+      onComplete: () => { splash.remove(); sessionStorage.setItem('splash_done', '1'); },
     });
   }, '+=1.1');
 })();
